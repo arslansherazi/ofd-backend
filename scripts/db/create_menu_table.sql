@@ -1,0 +1,14 @@
+USE ofd_db;
+CREATE TABLE IF NOT EXISTS menu
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	merchant_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    image_url TEXT NULL DEFAULT NULL,
+	is_active BOOL NOT NULL DEFAULT TRUE,
+	created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_date TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (merchant_id) REFERENCES merchant (id),
+    KEY idx_name (name) USING BTREE
+);

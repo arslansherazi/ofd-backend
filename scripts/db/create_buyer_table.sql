@@ -1,0 +1,13 @@
+USE ofd_db;
+CREATE TABLE IF NOT EXISTS buyer
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	user_id INT NOT NULL,
+	first_name VARCHAR(100) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_date TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    KEY idx_user (user_id) USING BTREE
+);
