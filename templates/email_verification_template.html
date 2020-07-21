@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <style>
+            #main_container
+            {
+                text-align: center;
+                border: 2px solid green;
+                border-radius: 5px;
+                padding: 10px;
+            }
+
+            #bottom_image
+            {
+                width: 30px;
+                height: 30px;
+            }
+
+            #main_image
+            {
+                margin-top: 10;
+                width: 150px;
+                height: 120px;
+            }
+
+            #verify_button_content
+            {
+                text-align: center;
+                height: 300px;
+                background-color: green;
+                width: 120px;
+                height: 20px;
+                color: white;
+                border-radius: 5px;
+                padding: 7px;
+            }
+
+            #bottom_container
+            {
+                margin-bottom: 20px;
+                align-items: baseline;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="main_container">
+            <image src="https://onlinefooddepot.pythonanywhere.com/ofd_files/main_image.jpg" id="main_image"/>
+
+            <h4>Click on following link to {{email_verification_main_text}}</h4><br />
+            <div>
+                <a href={{email_verification_link}} style="text-decoration: None; text-align: center;">
+                    <span id="verify_button_content">{{email_verification_button_text}}</span>
+                </a>
+            </div><br /><br />
+
+             <span>This verification link will expire within next 24 hours</span><br /><br />
+            <span>If you did not ask for this verification then just ignore this email</span><br /><br />
+
+            <div id="bottom_container">
+                <image src="https://onlinefooddepot.pythonanywhere.com/ofd_files/bottom_image.png" id="bottom_image" style="margin-right: 10px;"/>
+
+                <span>OFD - All Rights Reserved</span>
+
+                <image src="https://onlinefooddepot.pythonanywhere.com/ofd_files/bottom_image.png" id="bottom_image" style="margin-left: 10px;" />
+            </div>
+        </div>
+    </body>
+</html>
