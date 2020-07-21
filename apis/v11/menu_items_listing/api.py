@@ -19,6 +19,7 @@ class MenuItemsListing(BasePostResource):
         """
         self.menu_id = int(self.request_args.get('menu_id'))
         self.merchant_id = self.request_args.get('merchant_id')
+        self.menu_item_id = self.request_args.get('menu_item_id')
         self.is_buyer = bool(int(self.request_args.get('is_buyer')))
 
     def initialize_class_attributes(self):
@@ -54,7 +55,7 @@ class MenuItemsListing(BasePostResource):
                 while True:
                     related_menu_item = random.choice(self.menu_items)
                     related_menu_item_id = related_menu_item.get('id')
-                    if related_menu_item_id not in related_menu_items:
+                    if related_menu_item_id not in related_menu_items and related_menu_item_id != self.menu_item_id:
                         related_menu_items[related_menu_item_id] = related_menu_item
                     if len(list(related_menu_items.values())) >= DEFAULT_ITEMS_LIMIT:
                         break
@@ -62,6 +63,11 @@ class MenuItemsListing(BasePostResource):
                 self.menu_items = CommonHelpers.sort_list_data(related_menu_items, key='discount', descending=True)
             else:
                 self.menu_items = CommonHelpers.sort_list_data(self.menu_items, key='discount', descending=True)
+                for index, menu_item in enumerate(self.menu_items):
+                    menu_item_id = menu_item.get('id')
+                    if menu_item_id == self.menu_item_id:
+                        del self.menu_items[index]
+                        break
 
     def prepare_response(self):
         """
