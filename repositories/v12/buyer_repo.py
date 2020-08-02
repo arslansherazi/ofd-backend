@@ -116,8 +116,8 @@ class BuyerRepository(object):
         :return: merchants after calculating distance
         """
         for merchant in merchants:
-            merchant_latitude = merchant.get('merchant_latitude')
-            merchant_longitude = merchant.get('merchant_longitude')
+            merchant_latitude = merchant.get('merchant_info').get('latitude')
+            merchant_longitude = merchant.get('merchant_info').get('longitude')
             merchant_location = (merchant_latitude, merchant_longitude)
             buyer_location = (latitude, longitude)
             distance = geopy.distance.vincenty(merchant_location, buyer_location).km
@@ -155,7 +155,7 @@ class BuyerRepository(object):
         """
         items_hash = defaultdict()
         for item in items:
-            merchant_id = item.get('merchant_id')
+            merchant_id = item.get('merchant_info').get('id')
             if merchant_id in items_hash:
                 continue
             items_hash[merchant_id] = item
