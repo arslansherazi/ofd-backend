@@ -78,7 +78,7 @@ class Buyer(models.Model):
         _q = _q.select_related('user')
         _q = _q.filter((Q(user__username=username) | Q(user__email=username)), user__user_type=user_type)
         buyer = _q.values(
-            'first_name', 'last_name', username=F('user__username'), name=Concat('first_name', Value(' '), 'last_name'),
+            'user_id', 'first_name', 'last_name', username=F('user__username'), name=Concat('first_name', Value(' '), 'last_name'),  # noqa: 501
             email=F('user__email'), password=F('user__password'), is_email_verified=F('user__is_email_verified'),
             profile_image_url=F('user__profile_image_url')
         ).first()

@@ -132,16 +132,18 @@ class Ingredient(models.Model):
                     'rating_count': menu_item_data.get('menu_item_rating_count'),
                     'ingredients': [],
                     'is_favourite': False,
-                    'merchant_id': menu_item_data.get('merchant_id'),
-                    'merchant_name': menu_item_data.get('merchant_name'),
-                    'merchant_image_url': menu_item_data.get('merchant_image_url'),
-                    'merchant_latitude': menu_item_data.get('merchant_latitude'),
-                    'merchant_longitude': menu_item_data.get('merchant_longitude'),
-                    'merchant_address': menu_item_data.get('merchant_address'),
-                    'merchant_contact_no': menu_item_data.get('merchant_contact_no'),
-                    'menu_id': menu_item_data.get('menu_id'),
-                    'is_takeaway': menu_item_data.get('is_takeaway'),
-                    'is_delivery': menu_item_data.get('is_delivery'),
+                    'merchant_info': {
+                        'id': menu_item_data.get('merchant_id'),
+                        'name': menu_item_data.get('merchant_name'),
+                        'image_url': menu_item_data.get('merchant_image_url'),
+                        'latitude': menu_item_data.get('merchant_latitude'),
+                        'longitude': menu_item_data.get('merchant_longitude'),
+                        'address': menu_item_data.get('merchant_address'),
+                        'contact_no': menu_item_data.get('merchant_contact_no'),
+                        'is_takeaway': menu_item_data.get('is_takeaway'),
+                        'is_delivery': menu_item_data.get('is_delivery'),
+                    },
+                    'menu_id': menu_item_data.get('menu_id')
                 }
             menu_items[menu_item_id]['ingredients'].append(menu_item_ingredient)
         favourites_menu_items_ids = Favourite.get_menu_item_favourite_flags(user_id, menu_items_ids)

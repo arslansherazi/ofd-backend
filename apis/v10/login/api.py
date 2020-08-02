@@ -99,7 +99,8 @@ class Login(BasePostResource):
                     'email': self.login_info.get('email'),
                     'name': self.login_info.get('name'),
                     'username': self.login_info.get('username'),
-                    'profile_image_url': self.login_info.get('profile_image_url')
+                    'profile_image_url': self.login_info.get('profile_image_url'),
+                    'user_id': self.login_info.get('user_id')
                 }
             }
             if self.user_type == BUYER_USER_TYPE:
