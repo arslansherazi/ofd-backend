@@ -16,6 +16,7 @@ class Home(BasePostResource):
         """
         self.latitude = float(self.request_args.get('latitude'))
         self.longitude = float(self.request_args.get('longitude'))
+        self.location_id = int(self.request_args.get('location_id'))
         self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
         self.is_delivery = bool(int(self.request_args.get('is_delivery')))
 
@@ -23,21 +24,8 @@ class Home(BasePostResource):
         """
         Initializes class attributes
         """
-        self.location_id = 1
         self.home_sections = []
         self.user_id = self.current_user_info.get('user_id')
-
-    def verify_location(self):
-        """
-        Verifies that either user in the working locations of app or not
-        """
-        self.location_id = CommonHelpers.get_location_id(self.latitude, self.longitude)
-        if not self.location_id:
-            self.is_send_response = True
-            self.status_code = 422
-            self.response = {
-                'message': BuyerRepository.LOCATION_ERROR_MESSAGE
-            }
 
     def set_discounted_section(self):
         """
@@ -108,7 +96,6 @@ class Home(BasePostResource):
         """
         self.response = {
             'data': {
-                'location_id': self.location_id,
                 'home_sections': self.home_sections
             }
         }
@@ -119,9 +106,6 @@ class Home(BasePostResource):
         """
         self.populate_request_arguments()
         self.initialize_class_attributes()
-        # self.verify_location()
-        if self.is_send_response:
-            return
         self.set_discounted_section()
         self.set_top_rated_section()
         self.set_nearby_section()
