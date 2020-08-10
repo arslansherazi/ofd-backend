@@ -145,12 +145,11 @@ class CommonHelpers(object):
         """
         locations_boundries_data = Location.get_locations_boundries()
         for location_boundry_data in locations_boundries_data:
-            location_polygons_data = location_boundry_data.get('boundry')
+            location_polygon_data = location_boundry_data.get('boundry')
             user_location = Point(longitude, latitude)
-            for location_polygon_data in location_polygons_data:
-                location_polygon = wkt.loads(location_polygon_data)
-                if location_polygon.contain(user_location):
-                    return location_boundry_data.get('location_id')
+            location_polygon = wkt.loads(location_polygon_data)
+            if location_polygon.contains(user_location):
+                return location_boundry_data.get('id')
         return 0
 
     @staticmethod

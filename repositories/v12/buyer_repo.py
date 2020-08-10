@@ -21,7 +21,6 @@ class BuyerRepository(object):
     UPDATE_ORDER_SUCCESS_MESSAGE = 'Order is updated successfully'
     FEEDBACK_ERROR_MESSAGE = 'Order doest not exist or does not contain these items'
     REORDER_PRICE_CHANGE_MESSAGE = '{} has changed some of the items in your order. Price may be changed.'
-    LOCATION_ERROR_MESSAGE = 'Sorry\nWe are not operating in your area'
     DISCOUNTED_SECTION_NAME = 'Top Discount'
     TOP_RATED_SECTION_NAME = 'Top Rated'
     NEARBY_SECTION_NAME = 'Nearby'
@@ -36,6 +35,8 @@ class BuyerRepository(object):
     NO_FAVOURITES_COUNT = 0
     FAVOURITE_NOT_EXISTS_MESSAGE = 'Favourite does not exists'
     NO_ORDERS_IMAGE_NAME = 'no_orders.png'
+    OUT_OF_REACH_TITLE = 'Out of our reach'
+    OUT_OF_REACH_MESSAGE = 'Sorry, Seems like your address is outside of our service area'
 
     @staticmethod
     def update_order(
