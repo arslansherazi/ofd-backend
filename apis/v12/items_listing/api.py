@@ -24,6 +24,7 @@ class ItemsListing(BasePostResource):
         self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
         self.is_delivery = bool(int(self.request_args.get('is_delivery')))
         self.offset = self.request_args.get('offset')
+        self.is_auto_suggest_items = bool(int(self.request_args.get('is_auto_suggest_items')))
 
     def initialize_class_attributes(self):
         """
@@ -50,11 +51,11 @@ class ItemsListing(BasePostResource):
         """
         Gets items of location
         """
-        items = Ingredient.get_items_data(
-            location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
-            user_id=self.user_id
-        )
-        if self.query:
+        if not self.is_auto_suggest_items:
+            items = Ingredient.get_items_data(
+                location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
+                user_id=self.user_id
+            )
             items_hash = dict()
             filtered_items = []
             for index, item in enumerate(items):
@@ -71,6 +72,10 @@ class ItemsListing(BasePostResource):
             else:
                 self.get_final_items(filtered_items)
         else:
+            items = Ingredient.get_items_data(
+                location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
+                user_id=self.user_id, query=self.query
+            )
             if not items:
                 self.generate_no_search_results_response()
             else:
@@ -117,8 +122,8 @@ class ItemsListing(BasePostResource):
         self.populate_request_arguments()
         self.initialize_class_attributes()
         # self.verify_location()
-        if self.is_send_response:
-            return
+        # if self.is_send_response:
+        #     return
         self.get_items()
         if self.is_send_response:
             return

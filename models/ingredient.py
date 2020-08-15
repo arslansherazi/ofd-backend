@@ -57,7 +57,7 @@ class Ingredient(models.Model):
     def get_items_data(
             cls, menu_id=None, merchant_id=None, is_menu_items=False, location_id=None, is_takeaway=False,
             is_delivery=False, is_discounted=False, is_top_rated=False, is_buyer=False, user_id=None,
-            menu_items_ids=None
+            menu_items_ids=None, query=None
     ):
         """
         Gets items data
@@ -73,6 +73,7 @@ class Ingredient(models.Model):
         :param bool is_buyer: buyer flag
         :param int user_id: user id
         :param list menu_items_ids: menu items ids
+        :param str query: search query
         :rtype list
         :return: items data
         """
@@ -94,6 +95,8 @@ class Ingredient(models.Model):
             _q = _q.filter(menu_item__merchant__is_delivery_enabled=True)
         if menu_items_ids:
             _q = _q.filter(menu_item__id__in=menu_items_ids)
+        if query:
+            _q = _q.filter(menu_item__name=query)
         menu_items_data = _q.values(
             'menu_item_id', ingredient_id=F('id'), ingredient_name=F('name'), ingredient_quantity=F('quantity'),
             ingredient_unit=F('unit'), menu_item_name=F('menu_item__name'),
