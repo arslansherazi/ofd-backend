@@ -8,3 +8,4 @@ class ItemsListingValidator(serializers.Serializer):
     is_takeaway = serializers.IntegerField()
     is_delivery = serializers.IntegerField()
     offset = serializers.IntegerField()
+    is_auto_suggest_items = serializers.IntegerField(required=False, default=0)
