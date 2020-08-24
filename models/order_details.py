@@ -107,13 +107,15 @@ class OrderDetails(models.Model):
         :rtype list
         :return: order details
         """
+        columns = {}
         _q = cls.objects
         _q = _q.select_related('order', 'item', 'merchant')
         _q = _q.filter(order_id=order_id, order__buyer_id=buyer_id, order__merchant_id=merchant_id)
-        # if buyer_order_details:
-        #     _q = _q.values(
-        #         merchant_name=F('item__merchant__name'), contact_no=F('item__merchant__contact_no')
-        #     )
+        if buyer_order_details:
+            columns = {
+                'merchant_name': F('item__merchant__name'),
+                'contact_no': F('item__merchant__contact_no')
+            }
         order_details = _q.values(
             'id', 'order_id', 'item_id', 'item_quantity', order_number=F('order__order_number'),
             status=F('order__status'), price=F('order__price'), discount=F('order__discount'),
@@ -121,7 +123,7 @@ class OrderDetails(models.Model):
             unit=F('item__unit'), quantity=F('item__quantity'), item_price=F('item__price'),
             item_rating=F('item__rating'), item_discount=F('item__discount'),
             buyer_name=Concat('order__buyer__first_name', Value(' '), 'order__buyer__last_name'),
-            merchant_name=F('item__merchant__name'), merchant_contact_no=F('item__merchant__contact_no')
+            **columns
         )
         return order_details
 
