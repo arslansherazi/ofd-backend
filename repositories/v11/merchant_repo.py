@@ -53,9 +53,13 @@ class MerchantRepository(object):
         merchant_availability = Merchant.get_merchant_availability(merchant_id)
         is_open_all_day = merchant_availability.get('is_open_all_day')
         is_open_all_week = merchant_availability.get('is_open_all_week')
-        opening_days = merchant_availability.get('opening_days').split(',')
         opening_time = merchant_availability.get('opening_time')
         closing_time = merchant_availability.get('closing_time')
+        opening_days = merchant_availability.get('opening_days')
+        if opening_days:
+            opening_days = opening_days.split('')
+        else:
+            opening_days = []
         if not is_open_all_day:
             current_time = datetime.now().time()
             if not opening_time <= current_time <= closing_time:

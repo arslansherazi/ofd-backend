@@ -258,12 +258,12 @@ class Merchant(models.Model):
         """
         _q = cls.objects
         _q = _q.select_related('user')
-        _q = _q.filter((Q(user___username=username) | Q(user__email=username)), user__user_type=user_type)
-        buyer = _q.values(
+        _q = _q.filter((Q(user__username=username) | Q(user__email=username)), user__user_type=user_type)
+        merchant = _q.values(
             'name', username=F('user__username'), email=F('user__email'), password=F('user__password'),
             is_email_verified=F('user__is_email_verified'), profile_image_url=F('user__profile_image_url')
         ).first()
-        return buyer
+        return merchant
 
     @classmethod
     def get_profile(cls, merchant_id):

@@ -14,7 +14,7 @@ class OrderDetailsApi(BasePostResource):
         """
         Populates request arguments
         """
-        self.order_id = self.request_args.get('order_id')
+        self.order_id = int(self.request_args.get('order_id'))
         self.merchant_id = self.request_args.get('merchant_id')
         self.buyer_id = self.request_args.get('buyer_id')
 
