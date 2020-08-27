@@ -14,7 +14,7 @@ class ValidateEmail(BasePostResource):
         Populates request arguments
         """
         self.email = self.request_args.get('email')
-        self.user_type = int(self.request_args.get('user_type'))
+        self.user_type = self.request_args.get('user_type')
 
     def initialize_class_attributes(self):
         """

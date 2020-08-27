@@ -14,11 +14,11 @@ class Home(BasePostResource):
         """
         Populates request arguments
         """
-        self.latitude = float(self.request_args.get('latitude'))
-        self.longitude = float(self.request_args.get('longitude'))
-        self.location_id = int(self.request_args.get('location_id'))
-        self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
-        self.is_delivery = bool(int(self.request_args.get('is_delivery')))
+        self.latitude = self.request_args.get('latitude')
+        self.longitude = self.request_args.get('longitude')
+        self.location_id = self.request_args.get('location_id')
+        self.is_takeaway = self.request_args.get('is_takeaway')
+        self.is_delivery = self.request_args.get('is_delivery')
 
     def initialize_class_attributes(self):
         """

@@ -16,8 +16,8 @@ class UpdateOrder(BasePostResource):
         """
         self.order_id = self.request_args.get('order_id')
         self.delivery_address = self.request_args.get('delivery_address')
-        self.is_delivery = bool(int(self.request_args.get('is_delivery')))
-        self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
+        self.is_delivery = self.request_args.get('is_delivery')
+        self.is_takeaway = self.request_args.get('is_takeaway')
         self.order_items = self.request_args.get('order_items')
         if self.delivery_address:
             self.latitude = self.request_args.get('latitude')

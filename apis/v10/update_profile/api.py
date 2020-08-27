@@ -19,7 +19,7 @@ class UpdateProfile(BasePostResource):
         """
         Populates request arguments
         """
-        self.user_type = int(self.request_args.get('user_type'))
+        self.user_type = self.request_args.get('user_type')
         self.username = self.request_args.get('username')
         self.profile_image = self.request_args.get('profile_image')
         if self.user_type == MERCHANT_USER_TYPE:
@@ -29,8 +29,8 @@ class UpdateProfile(BasePostResource):
             self.address = self.request_args.get('address')
             self.latitude = self.request_args.get('latitude')
             self.longitude = self.request_args.get('longitude')
-            self.is_delivery_enabled = bool(self.request_args.get('is_delivery_enabled'))
-            self.is_takeaway_enabled = bool(self.request_args.get('is_takeaway_enabled'))
+            self.is_delivery_enabled = self.request_args.get('is_delivery_enabled')
+            self.is_takeaway_enabled = self.request_args.get('is_takeaway_enabled')
         else:
             self.first_name = self.request_args.get('first_name')
             self.last_name = self.request_args.get('last_name')

@@ -35,7 +35,7 @@ class BaseResource(APIView):
             self.http_response = None
             try:
                 if self.request_validator:
-                    self.request_validator.run_validation(data=self.request_args)
+                    self.request_args = self.request_validator.run_validation(data=self.request_args)
             except Exception as exception:
                 # bad_request = True
                 self.request_path = None

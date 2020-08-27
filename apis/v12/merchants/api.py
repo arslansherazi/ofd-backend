@@ -13,8 +13,8 @@ class Merchants(BasePostResource):
         Populates request arguments
         """
         self.location_id = self.request_args.get('location_id')
-        self.is_delivery = bool(int(self.request_args.get('is_delivery')))
-        self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
+        self.is_delivery = self.request_args.get('is_delivery')
+        self.is_takeaway = self.request_args.get('is_takeaway')
 
     def initialize_class_attributes(self):
         """

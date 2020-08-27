@@ -18,7 +18,7 @@ class ChangePassword(BasePostResource):
         """
         Populates request arguments
         """
-        self.is_forgot_password = bool(self.request_args.get('is_forgot_password'))
+        self.is_forgot_password = self.request_args.get('is_forgot_password')
         self.new_password = self.request_args.get('new_password')
         if self.is_forgot_password:
             self.encrypted_change_password_token = self.request_args.get('__c_p_t')

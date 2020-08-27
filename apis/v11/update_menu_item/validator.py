@@ -6,9 +6,9 @@ class IngredientValidator(serializers.Serializer):
     name = serializers.CharField(required=False)
     quantity = serializers.IntegerField(required=False)
     unit = serializers.CharField(required=False)
-    is_updated = serializers.IntegerField(required=False)
-    is_removed = serializers.IntegerField(required=False)
-    is_added = serializers.IntegerField(required=False)
+    is_updated = serializers.BooleanField(required=False, default=False)
+    is_removed = serializers.BooleanField(required=False, default=False)
+    is_added = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
         if not any([attrs['is_updated'], attrs['is_removed'], attrs['is_added']]):
@@ -34,6 +34,6 @@ class UpdateMenuItemValidator(serializers.Serializer):
     quantity = serializers.IntegerField(required=False)
     image = serializers.ImageField(required=False)
     discount = serializers.IntegerField(required=False)
-    is_activated = serializers.IntegerField(required=False, default=0)
-    is_deactivated = serializers.IntegerField(required=False, default=0)
+    is_activated = serializers.BooleanField(required=False, default=False)
+    is_deactivated = serializers.BooleanField(required=False, default=False)
     ingredients = IngredientValidator(many=True, required=False)

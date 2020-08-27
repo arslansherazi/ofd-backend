@@ -7,8 +7,8 @@ class MenuItemValidator(serializers.Serializer):
     price = serializers.IntegerField()
     discount = serializers.IntegerField()
     updated_quantity = serializers.IntegerField(required=False)
-    is_removed = serializers.IntegerField(required=False)
-    is_changed = serializers.IntegerField(required=False)
+    is_removed = serializers.BooleanField(required=False, default=False)
+    is_changed = serializers.BooleanField(required=False, default=False)
 
 
 class UpdateOrderValidator(serializers.Serializer):
@@ -16,8 +16,8 @@ class UpdateOrderValidator(serializers.Serializer):
     delivery_address = serializers.CharField(required=False)
     latitude = serializers.FloatField(required=False)
     longitude = serializers.FloatField(required=False)
-    is_delivery = serializers.IntegerField(required=False)
-    is_takeaway = serializers.IntegerField(required=False)
+    is_delivery = serializers.BooleanField(required=False, default=False)
+    is_takeaway = serializers.BooleanField(required=False, default=False)
     order_items = MenuItemValidator(required=False, many=True)
 
     def validate(self, attrs):
