@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class ItemsListingValidator(serializers.Serializer):
-    query = serializers.CharField()
+    query = serializers.CharField(max_length=500)
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     is_takeaway = serializers.BooleanField()

@@ -3,9 +3,9 @@ from rest_framework import serializers
 
 class IngredientValidator(serializers.Serializer):
     id = serializers.IntegerField(required=False)
-    name = serializers.CharField(required=False)
+    name = serializers.CharField(required=False, max_length=100)
     quantity = serializers.IntegerField(required=False)
-    unit = serializers.CharField(required=False)
+    unit = serializers.CharField(required=False, max_length=50)
     is_updated = serializers.BooleanField(required=False, default=False)
     is_removed = serializers.BooleanField(required=False, default=False)
     is_added = serializers.BooleanField(required=False, default=False)
