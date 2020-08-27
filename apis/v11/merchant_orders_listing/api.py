@@ -14,8 +14,8 @@ class MerchantOrdersListing(BasePostResource):
         """
         Populates request arguments
         """
-        self.offset = self.request_args.get('offset', 0)
-        self.limit = self.request_args.get('limit', 20)
+        self.offset = self.request_args.get('offset')
+        self.limit = self.request_args.get('limit')
         self.filters = self.request_args.get('filters')
 
     def initialize_class_attributes(self):

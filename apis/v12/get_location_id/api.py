@@ -13,8 +13,8 @@ class GetLocationId(BasePostResource):
         """
         Populates request arguments
         """
-        self.latitude = float(self.request_args.get('latitude'))
-        self.longitude = float(self.request_args.get('longitude'))
+        self.latitude = self.request_args.get('latitude')
+        self.longitude = self.request_args.get('longitude')
 
     def verify_location(self):
         """

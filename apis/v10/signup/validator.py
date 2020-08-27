@@ -10,9 +10,9 @@ class SignupValidator(serializers.Serializer):
     user_type = serializers.IntegerField()
     first_name = serializers.CharField(required=False)
     last_name = serializers.CharField(required=False)
-    image = serializers.ImageField(required=False, default=None)
+    image = serializers.ImageField(required=False, default='default value')
     name = serializers.CharField(required=False)
-    title = serializers.CharField(required=False, default=None)
+    title = serializers.CharField(required=False)
     latitude = serializers.FloatField(required=False)
     longitude = serializers.FloatField(required=False)
     location_id = serializers.IntegerField(required=False)
@@ -22,11 +22,11 @@ class SignupValidator(serializers.Serializer):
     items_limit = serializers.IntegerField(required=False)
     is_takeaway_enabled = serializers.BooleanField(required=False, default=False)
     is_delivery_enabled = serializers.BooleanField(required=False, default=False)
-    opening_time = serializers.TimeField(required=False, default=None)
-    closing_time = serializers.TimeField(required=False, default=None)
-    opening_days = serializers.CharField(max_length=255, required=False, default=None)
-    is_open_all_day = serializers.IntegerField(required=False)
-    is_open_all_week = serializers.IntegerField(required=False)
+    opening_time = serializers.TimeField(required=False)
+    closing_time = serializers.TimeField(required=False)
+    opening_days = serializers.CharField(max_length=255, required=False)
+    is_open_all_day = serializers.BooleanField()
+    is_open_all_week = serializers.BooleanField()
 
     def validate(self, attrs):
         if attrs['user_type'] == MERCHANT_USER_TYPE:

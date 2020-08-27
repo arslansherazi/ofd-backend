@@ -22,7 +22,7 @@ class SendEmail(BasePostResource):
         """
         Populates request arguments
         """
-        self.user_type = int(self.request_args.get('user_type'))
+        self.user_type = self.request_args.get('user_type')
         self.is_forgot_password_code = self.request_args.get('is_forgot_password_code')
         self.is_email_verification_code = self.request_args.get('is_email_verification_code')
         self.is_change_email_code = self.request_args.get('is_change_email_code')

@@ -17,8 +17,8 @@ class UpdateMenu(BasePostResource):
         self.menu_id = self.request_args.get('menu_id')
         self.name = self.request_args.get('name')
         self.image = self.request_args.get('image')
-        self.is_activate = bool(int(self.request_args.get('is_activate')))
-        self.is_deactivate = bool(int(self.request_args.get('is_deactivate')))
+        self.is_activate = self.request_args.get('is_activate')
+        self.is_deactivate = self.request_args.get('is_deactivate')
 
     def initialize_class_attributes(self):
         """

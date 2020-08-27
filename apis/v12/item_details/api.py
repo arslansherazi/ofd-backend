@@ -17,9 +17,9 @@ class MenuItemDetails(BasePostResource):
         """
         Populates request arguments
         """
-        self.menu_item_id = int(self.request_args.get('menu_item_id'))
-        self.menu_id = int(self.request_args.get('menu_id'))
-        self.merchant_id = int(self.request_args.get('merchant_id'))
+        self.menu_item_id = self.request_args.get('menu_item_id')
+        self.menu_id = self.request_args.get('menu_id')
+        self.merchant_id = self.request_args.get('merchant_id')
 
     def initialize_class_attributes(self):
         """

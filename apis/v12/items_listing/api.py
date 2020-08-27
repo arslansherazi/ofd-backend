@@ -21,10 +21,10 @@ class ItemsListing(BasePostResource):
         self.query = self.request_args.get('query')
         self.latitude = self.request_args.get('latitude')
         self.longitude = self.request_args.get('longitude')
-        self.is_takeaway = bool(int(self.request_args.get('is_takeaway')))
-        self.is_delivery = bool(int(self.request_args.get('is_delivery')))
+        self.is_takeaway = self.request_args.get('is_takeaway')
+        self.is_delivery = self.request_args.get('is_delivery')
         self.offset = self.request_args.get('offset')
-        self.is_auto_suggest_items = bool(int(self.request_args.get('is_auto_suggest_items')))
+        self.is_auto_suggest_items = self.request_args.get('is_auto_suggest_items')
 
     def initialize_class_attributes(self):
         """

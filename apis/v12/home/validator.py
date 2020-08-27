@@ -5,5 +5,5 @@ class HomeValidator(serializers.Serializer):
     location_id = serializers.IntegerField()
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
-    is_takeaway = serializers.IntegerField()
-    is_delivery = serializers.IntegerField()
+    is_takeaway = serializers.BooleanField()
+    is_delivery = serializers.BooleanField()

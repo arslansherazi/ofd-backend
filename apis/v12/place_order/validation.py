@@ -11,9 +11,9 @@ class OrderDetailsValidator(serializers.Serializer):
 class PlaceOrderValidator(serializers.Serializer):
     merchant_id = serializers.IntegerField()
     is_delivery = serializers.BooleanField(required=False, default=False)
-    delivery_address = serializers.CharField(required=False, default=None)
-    latitude = serializers.FloatField(required=False, default=None)
-    longitude = serializers.FloatField(required=False, default=None)
+    delivery_address = serializers.CharField(required=False)
+    latitude = serializers.FloatField(required=False)
+    longitude = serializers.FloatField(required=False)
     order_details = OrderDetailsValidator(many=True)
 
     def validate(self, attrs):

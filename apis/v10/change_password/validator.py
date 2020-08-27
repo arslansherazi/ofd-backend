@@ -12,9 +12,4 @@ class ChangePasswordValidator(serializers.Serializer):
         if not attrs['is_forgot_password']:
             if not attrs['old_password']:
                 serializers.ValidationError('old_password is required')
-        # else:
-        #     if not attrs['__c_p_t']:
-        #         serializers.ValidationError('__c_p_t is required')
-        #     elif not attrs['__ui']:
-        #         serializers.ValidationError('__ui is required')
         return attrs
