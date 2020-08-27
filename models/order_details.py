@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.db.models import F, Q, Value
 from django.db.models.functions import Concat
@@ -175,6 +176,10 @@ class OrderDetails(models.Model):
         :rtype list
         :returns menu item orders ids
         """
+        cache_key = 'OrderDetails:get_menu_item_orders_ids:{}'.format(menu_item_id)
+        cache_value = cache.get(cache_key)
+        if cache_value:
+            return cache_value
         _q = cls.objects
         _q = _q.select_related('item', 'order')
         _q = _q.filter(item__id=menu_item_id, order__status__in=[
@@ -186,14 +191,14 @@ class OrderDetails(models.Model):
         for menu_item_order_data in menu_item_orders_data:
             menu_item_order_id = menu_item_order_data.get('order_id')
             menu_item_orders_ids.append(menu_item_order_id)
+        cache.set(cache_key, menu_item_orders_ids)
         return menu_item_orders_ids
 
     @classmethod
-    def delete_order_items(cls, order_id, order_details_ids):
+    def delete_order_items(cls, order_details_ids):
         """
         Deletes order items
 
-        :param int order_id: order id
         :param list order_details_ids: menu items ids
         """
         _q = cls.objects
@@ -201,11 +206,10 @@ class OrderDetails(models.Model):
         order_items.delete()
 
     @classmethod
-    def update_order_items(cls, order_id, updated_items):
+    def update_order_items(cls, updated_items):
         """
         Updates order items
 
-        :param int order_id: order id
         :param list updated_items: updated order items
         """
         updated_order_items = []
