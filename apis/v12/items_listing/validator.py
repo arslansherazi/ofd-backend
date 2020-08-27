@@ -9,3 +9,4 @@ class ItemsListingValidator(serializers.Serializer):
     is_delivery = serializers.BooleanField()
     offset = serializers.IntegerField()
     is_auto_suggest_items = serializers.BooleanField(required=False, default=False)
+    is_auto_suggest = serializers.BooleanField(required=False, default=False)

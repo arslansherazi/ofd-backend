@@ -1,7 +1,7 @@
 from configurations.settings.common import *
 
 DEBUG = True
-ALLOWED_HOSTS = ['192.168.10.3', '0.0.0.0']
+ALLOWED_HOSTS = ['192.168.10.12', '0.0.0.0']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -10,6 +10,6 @@ DATABASES = {
         'PASSWORD': 'rootroot',
     }
 }
-API_BASE_URL = 'http://192.168.10.3:8000/ofd_apis{}'
-BASE_URL = 'http://192.168.10.3:8000'
+API_BASE_URL = 'http://192.168.10.12:8000/ofd_apis{}'
+BASE_URL = 'http://192.168.10.12:8000'
 AUTH_USER_MODEL = 'apis.User'

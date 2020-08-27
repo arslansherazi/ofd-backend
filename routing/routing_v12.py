@@ -1,5 +1,6 @@
 from apis.v11.report.api import ReportApi
 from apis.v12.add_favourite.api import AddFavourite
+from apis.v12.add_new_address.api import AddNewAddress
 from apis.v12.buyer_orders_listing.api import BuyerOrdersListing
 from apis.v12.cancel_order.api import CancelOrder
 from apis.v12.favourites_listing.api import FavouritesListing
@@ -40,3 +41,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['merchants'] = Merchants
         self.routing_collection['item_details'] = MenuItemDetails
         self.routing_collection['get_location_id'] = GetLocationId
+        self.routing_collection['add_new_address'] = AddNewAddress

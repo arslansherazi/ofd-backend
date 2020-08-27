@@ -1,0 +1,17 @@
+USE ofd_db;
+CREATE TABLE IF NOT EXISTS address
+(
+	id INT NOT NULL AUTO_INCREMENT,
+	buyer_id INT NOT NULL,
+	building VARCHAR(100) NULL DEFAULT NULL,
+	street VARCHAR(100) NOT NULL,
+	state VARCHAR(100) NOT NULL,
+	latitude FLOAT NOT NULL,
+	longitude FLOAT NOT NULL,
+	tag VARCHAR(50) NOT NULL,
+	created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
+	updated_date TIMESTAMP NULL DEFAULT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (buyer_id) REFERENCES buyer (id),
+    KEY idx_user (buyer_id) USING BTREE
+);
