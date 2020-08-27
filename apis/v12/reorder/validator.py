@@ -26,15 +26,15 @@ class ReorderValidator(serializers.Serializer):
     longitude = serializers.FloatField(required=False)
 
     def validate(self, attrs):
-        if attrs['is_price_checked']:
-            if not attrs['merchant_id']:
+        if attrs.get('is_price_checked'):
+            if not attrs.get('merchant_id'):
                 raise serializers.ValidationError('merchant_id is required')
-            if not attrs['merchant_name']:
+            if not attrs.get('merchant_name'):
                 raise serializers.ValidationError('merchant_name is required')
-        if not attrs['is_price_checked']:
-            if not attrs['is_price_changed']:
-                if not attrs['is_changed']:
+        if not attrs.get('is_price_checked'):
+            if not attrs.get('is_price_changed'):
+                if not attrs.get('is_changed'):
                     raise serializers.ValidationError('is_changed is required')
-            if not attrs['items_details']:
+            if not attrs.get('items_details'):
                 raise serializers.ValidationError('items_details is required')
         return attrs

@@ -10,7 +10,7 @@ class SendEmailValidator(serializers.Serializer):
     is_change_email_code = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
-        if attrs['is_change_email_code']:
-            if not attrs['new_email']:
+        if attrs.get('is_change_email_code'):
+            if not attrs.get('new_email'):
                 raise serializers.ValidationError('new_email is required')
         return attrs

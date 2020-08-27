@@ -30,35 +30,35 @@ class SignupValidator(serializers.Serializer):
 
     def validate(self, attrs):
         if attrs['user_type'] == MERCHANT_USER_TYPE:
-            if not attrs['name']:
+            if not attrs.get('name'):
                 raise serializers.ValidationError('name is required')
-            if not attrs['image']:
+            if not attrs.get('image'):
                 raise serializers.ValidationError('image is required')
-            if not attrs['latitude']:
+            if not attrs.get('latitude'):
                 raise serializers.ValidationError('latitude is required')
-            if not attrs['longitude']:
+            if not attrs.get('longitude'):
                 raise serializers.ValidationError('longitude is required')
-            if not attrs['location_id']:
+            if not attrs.get('location_id'):
                 raise serializers.ValidationError('location_id is required')
-            if not attrs['contact_no']:
+            if not attrs.get('contact_no'):
                 raise serializers.ValidationError('contact_no is required')
-            if not attrs['address']:
+            if not attrs.get('address'):
                 raise serializers.ValidationError('address is required')
-            if not attrs['items_limit']:
+            if not attrs.get('items_limit'):
                 raise serializers.ValidationError('items_limit is required')
-            if not attrs['menus_limit']:
+            if not attrs.get('menus_limit'):
                 raise serializers.ValidationError('menus_limit is required')
-            if not attrs['is_open_all_day']:
-                if not attrs['opening_time']:
+            if not attrs.get('is_open_all_day'):
+                if not attrs.get('opening_time'):
                     raise serializers.ValidationError('opening_time is required')
-                if not attrs['closing_time']:
+                if not attrs.get('closing_time'):
                     raise serializers.ValidationError('closing_time is required')
-            if not attrs['is_open_all_week']:
-                if not attrs['opening_days']:
+            if not attrs.get('is_open_all_week'):
+                if not attrs.get('opening_days'):
                     raise serializers.ValidationError('opening_days is required')
         else:
             if not attrs.get('first_name'):
                 raise serializers.ValidationError('first_name is required')
-            if not attrs['last_name']:
+            if not attrs.get('last_name'):
                 raise serializers.ValidationError('last_name is required')
         return attrs

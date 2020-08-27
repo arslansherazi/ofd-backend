@@ -8,7 +8,7 @@ class MenuItemsListingValidator(serializers.Serializer):
     menu_item_id = serializers.IntegerField(required=False)
 
     def validate(self, attrs):
-        if attrs['is_buyer']:
-            if not attrs['menu_item_id']:
+        if attrs.get('is_buyer'):
+            if not attrs.get('menu_item_id'):
                 raise serializers.ValidationError('menu_item_id is required')
         return attrs

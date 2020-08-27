@@ -9,7 +9,7 @@ class ChangePasswordValidator(serializers.Serializer):
     __ui = serializers.CharField(required=False, max_length=255)
 
     def validate(self, attrs):
-        if not attrs['is_forgot_password']:
-            if not attrs['old_password']:
+        if not attrs.get('is_forgot_password'):
+            if not attrs.get('old_password'):
                 serializers.ValidationError('old_password is required')
         return attrs
