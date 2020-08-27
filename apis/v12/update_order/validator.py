@@ -21,9 +21,9 @@ class UpdateOrderValidator(serializers.Serializer):
     order_items = MenuItemValidator(required=False, many=True)
 
     def validate(self, attrs):
-        if attrs['delivery_address']:
-            if not attrs['latitude']:
+        if attrs.get('delivery_address'):
+            if not attrs.get('latitude'):
                 raise ValueError('latitude is required')
-            if not attrs['longitude']:
+            if not attrs.get('longitude'):
                 raise ValueError('longitude is required')
         return attrs

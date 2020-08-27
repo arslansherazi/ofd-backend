@@ -18,7 +18,7 @@ class UpdateOrderStatusValidator(serializers.Serializer):
     driver_info = DriverInfoValidator(required=False)
 
     def validate(self, attrs):
-        if attrs['status'] == MerchantRepository.ON_ROUTE_ORDER_STATUS:
-            if not attrs['driver_info']:
+        if attrs.get('status') == MerchantRepository.ON_ROUTE_ORDER_STATUS:
+            if not attrs.get('driver_info'):
                 raise serializers.ValidationError('driver_info is required')
         return attrs

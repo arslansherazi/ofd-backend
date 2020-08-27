@@ -12,12 +12,12 @@ class VerifyEmailValidator(serializers.Serializer):
     is_change_email_code = serializers.BooleanField(default=False, required=False)
 
     def validate(self, attrs):
-        if attrs['is_change_email_code']:
-            if not attrs['old_email']:
+        if attrs.get('is_change_email_code'):
+            if not attrs.get('old_email'):
                 raise serializers.ValidationError('old_email is required')
-            if not attrs['new_email']:
+            if not attrs.get('new_email'):
                 raise serializers.ValidationError('new_email is required')
-        if attrs['is_forgot_password_code']:
-            if not attrs['change_password_token']:
+        if attrs.get('is_forgot_password_code'):
+            if not attrs.get('change_password_token'):
                 raise serializers.ValidationError('change_password_token is required')
         return attrs

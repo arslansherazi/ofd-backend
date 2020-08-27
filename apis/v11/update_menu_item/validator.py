@@ -11,17 +11,17 @@ class IngredientValidator(serializers.Serializer):
     is_added = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
-        if not any([attrs['is_updated'], attrs['is_removed'], attrs['is_added']]):
+        if not any([attrs.get('is_updated'), attrs.get('is_removed'), attrs.get('is_added')]):
             raise serializers.ValidationError('ingredient update flag is required')
-        if attrs['is_updated'] or attrs['is_deleted']:
+        if attrs.get('is_updated') or attrs.get('is_deleted'):
             if not attrs['id']:
                 raise serializers.ValidationError('ingredient id is required')
-        if attrs['is_updated'] or attrs['is_added']:
-            if not attrs['name']:
+        if attrs.get('is_updated') or attrs.get('is_added'):
+            if not attrs.get('name'):
                 raise serializers.ValidationError('ingredient name is required')
-            if not attrs['quantity']:
+            if not attrs.get('quantity'):
                 raise serializers.ValidationError('ingredient quantity name is required')
-            if not attrs['unit']:
+            if not attrs.get('unit'):
                 raise serializers.ValidationError('ingredient unit is required')
         return attrs
 

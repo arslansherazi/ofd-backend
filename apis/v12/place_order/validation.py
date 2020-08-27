@@ -17,11 +17,11 @@ class PlaceOrderValidator(serializers.Serializer):
     order_details = OrderDetailsValidator(many=True)
 
     def validate(self, attrs):
-        if attrs['is_delivery']:
-            if not attrs['delivery_address']:
+        if attrs.get('is_delivery'):
+            if not attrs.get('delivery_address'):
                 raise serializers.ValidationError('delivery_address is required')
-            if not attrs['latitude']:
+            if not attrs.get('latitude'):
                 raise serializers.ValidationError('latitude is required')
-            if not attrs['longitude']:
+            if not attrs.get('longitude'):
                 raise serializers.ValidationError('longitude is required')
         return attrs
