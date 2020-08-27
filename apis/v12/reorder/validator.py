@@ -17,11 +17,11 @@ class ReorderValidator(serializers.Serializer):
     is_changed = serializers.IntegerField(required=False)
     is_price_changed = serializers.IntegerField(required=False)
     merchant_id = serializers.IntegerField(required=False)
-    merchant_name = serializers.CharField(required=False)
+    merchant_name = serializers.CharField(required=False, max_length=100)
     items_details = ItemDetailsValidator(many=True, required=False)
     is_delivery = serializers.IntegerField(required=False)
     is_takeaway = serializers.IntegerField(required=False)
-    delivery_address = serializers.CharField(required=False)
+    delivery_address = serializers.CharField(required=False, max_length=255)
     latitude = serializers.FloatField(required=False)
     longitude = serializers.FloatField(required=False)
 

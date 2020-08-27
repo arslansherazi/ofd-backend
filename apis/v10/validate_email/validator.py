@@ -2,5 +2,5 @@ from rest_framework import serializers
 
 
 class ValidateEmailValidator(serializers.Serializer):
-    email = serializers.CharField()
-    user_type = serializers.CharField()
+    email = serializers.CharField(max_length=255)
+    user_type = serializers.IntegerField()

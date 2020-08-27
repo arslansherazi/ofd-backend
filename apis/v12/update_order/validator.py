@@ -13,7 +13,7 @@ class MenuItemValidator(serializers.Serializer):
 
 class UpdateOrderValidator(serializers.Serializer):
     order_id = serializers.IntegerField()
-    delivery_address = serializers.CharField(required=False)
+    delivery_address = serializers.CharField(required=False, max_length=255)
     latitude = serializers.FloatField(required=False)
     longitude = serializers.FloatField(required=False)
     is_delivery = serializers.BooleanField(required=False, default=False)
