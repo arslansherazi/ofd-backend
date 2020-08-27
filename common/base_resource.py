@@ -104,8 +104,12 @@ class BaseResource(APIView):
         return logger
 
     def handle_bad_request_response(self, exception):
+        param_name = list(exception.detail.keys())[0]
+        response_message = exception.detail.get(param_name)[0]
+        if param_name != 'non_field_errors':
+            response_message = '{param_name}: {message}'.format(param_name=param_name, message=response_message)
         self.response = {
-            'message': str(exception)
+            'message': response_message
         }
         self.status_code = codes.BAD_REQUEST
 

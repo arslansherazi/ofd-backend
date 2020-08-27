@@ -57,7 +57,7 @@ class SignupValidator(serializers.Serializer):
                 if not attrs['opening_days']:
                     raise serializers.ValidationError('opening_days is required')
         else:
-            if not attrs['first_name']:
+            if not attrs.get('first_name'):
                 raise serializers.ValidationError('first_name is required')
             if not attrs['last_name']:
                 raise serializers.ValidationError('last_name is required')
