@@ -37,6 +37,8 @@ class BuyerRepository(object):
     NO_ORDERS_IMAGE_NAME = 'no_orders.png'
     OUT_OF_REACH_TITLE = 'Out of our reach'
     OUT_OF_REACH_MESSAGE = 'Sorry, Seems like your address is outside of our service area'
+    ADDRESS_LIMIT_EXCEEDS_MESSAGE = 'You can save only {} addresses'
+    ADDRESS_ALREADY_PRESENT_MESSAGE = 'Address already present with {} tag'
 
     @staticmethod
     def update_order(

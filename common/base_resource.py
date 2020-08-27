@@ -68,6 +68,9 @@ class BaseResource(APIView):
     def process_request(self):
         pass
 
+    def populate_request_arguments(self):
+        pass
+
     def set_current_user_info(self):
         if (
                 self.end_point not in BASIC_AUTH_ENDPOINTS and

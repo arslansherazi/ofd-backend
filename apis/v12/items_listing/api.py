@@ -25,6 +25,7 @@ class ItemsListing(BasePostResource):
         self.is_delivery = self.request_args.get('is_delivery')
         self.offset = self.request_args.get('offset')
         self.is_auto_suggest_items = self.request_args.get('is_auto_suggest_items')
+        self.is_auto_suggest = self.request_args.get('is_auto_suggest')
 
     def initialize_class_attributes(self):
         """
@@ -32,20 +33,8 @@ class ItemsListing(BasePostResource):
         """
         self.limit = ITEMS_LISTING_PAGE_LIMIT
         self.final_outlets = []
-        self.location_id = 1  # TODO: just use for testing. Change back to None when location problem is fixed
+        self.location_id = 0
         self.user_id = self.current_user_info.get('user_id')
-
-    def verify_location(self):
-        """
-        Verifies that either user in the working locations of app or not
-        """
-        self.location_id = CommonHelpers.get_location_id(self.latitude, self.longitude)
-        if not self.location_id:
-            self.is_send_response = True
-            self.status_code = 422
-            self.response = {
-                'message': BuyerRepository.LOCATION_ERROR_MESSAGE
-            }
 
     def get_items(self):
         """
@@ -61,16 +50,34 @@ class ItemsListing(BasePostResource):
             for index, item in enumerate(items):
                 items_hash[index] = item.get('name')
             fuzzy_outlets = process.extract(query=self.query, choices=items_hash, limit=FUZZY_SEARCH_RECORDS_LIMIT)
-            if fuzzy_outlets:
-                for fuzzy_outlet in fuzzy_outlets:
-                    if fuzzy_outlet[1] > FUZZY_SCORE:
-                        item_index = fuzzy_outlet[2]
-                        item = items[item_index]
-                        filtered_items.append(item)
-            if not filtered_items:
-                self.generate_no_search_results_response()
+            if self.is_auto_suggest:
+                if fuzzy_outlets:
+                    for fuzzy_outlet in fuzzy_outlets:
+                        if fuzzy_outlet[1] > FUZZY_SCORE:
+                            item_index = fuzzy_outlet[2]
+                            item = items[item_index]
+                            filtered_items.append(item)
+                if not filtered_items:
+                    self.generate_no_search_results_response()
+                else:
+                    self.get_final_items(filtered_items)
             else:
-                self.get_final_items(filtered_items)
+                menu_items_data = {}
+                for fuzzy_outlet in fuzzy_outlets:
+                    fuzzy_outlet_id = fuzzy_outlet.get('id')
+                    if fuzzy_outlet_id in menu_items_data:
+                        fuzzy_outlet[fuzzy_outlet_id]['count'] = fuzzy_outlet[fuzzy_outlet_id]['count'] + 1
+                    else:
+                        fuzzy_outlet[fuzzy_outlet_id] = {
+                            'name': fuzzy_outlet.get('name'),
+                            'count': 1
+                        }
+                self.is_send_response = True
+                self.response = {
+                    'data': {
+                        'menu_items_data': list(menu_items_data.values())
+                    }
+                }
         else:
             items = Ingredient.get_items_data(
                 location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
@@ -121,9 +128,6 @@ class ItemsListing(BasePostResource):
         """
         self.populate_request_arguments()
         self.initialize_class_attributes()
-        # self.verify_location()
-        # if self.is_send_response:
-        #     return
         self.get_items()
         if self.is_send_response:
             return
