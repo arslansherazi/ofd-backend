@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.db import models
 from django.utils import timezone
 
@@ -125,11 +126,18 @@ class MenuItem(models.Model):
         :rtype dict
         :return: menu item
         """
+        cache_key = 'MenuItem:get_menu_item:{menu_item_id}_{merchant_id}'.format(
+            menu_item_id=menu_item_id, merchant_id=merchant_id
+        )
+        cache_value = cache.get(cache_key)
+        if cache_value:
+            return cache_value
         _q = cls.objects
         if merchant_id:
             _q = _q.filter(merchant_id=merchant_id)
         _q = _q.filter(id=menu_item_id)
         menu_item = _q.values('menu_id', 'image_url').first()
+        cache.set(cache_key, menu_item)
         return menu_item
 
     @classmethod
