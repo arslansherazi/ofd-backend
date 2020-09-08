@@ -77,3 +77,18 @@ class Address(models.Model):
         if address:
             return True
         return False
+
+    @classmethod
+    def get_addresses(cls, buyer_id):
+        """
+        Gets all addresses
+
+        :param int buyer_id: buyer id
+
+        :rtype list
+        :returns buyer addresses
+        """
+        _q = cls.objects
+        _q = _q.filter(buyer_id=buyer_id)
+        addresses = _q.values('id', 'building', 'street', 'state', 'latitude', 'longitude', 'tag')
+        return addresses

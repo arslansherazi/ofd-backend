@@ -5,6 +5,7 @@ from apis.v12.buyer_orders_listing.api import BuyerOrdersListing
 from apis.v12.cancel_order.api import CancelOrder
 from apis.v12.favourites_listing.api import FavouritesListing
 from apis.v12.feedback.api import Feedback
+from apis.v12.get_addresses.api import GetAddresses
 from apis.v12.get_location_id.api import GetLocationId
 from apis.v12.home.api import Home
 from apis.v12.item_details.api import MenuItemDetails
@@ -42,3 +43,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['item_details'] = MenuItemDetails
         self.routing_collection['get_location_id'] = GetLocationId
         self.routing_collection['add_new_address'] = AddNewAddress
+        self.routing_collection['get_addresses'] = GetAddresses
