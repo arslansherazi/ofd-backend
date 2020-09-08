@@ -16,6 +16,7 @@ from apis.v12.order_status.api import OrderStatus
 from apis.v12.place_order.api import PlaceOrder
 from apis.v12.remove_favourite.api import RemoveFavourite
 from apis.v12.reorder.api import Reorder
+from apis.v12.update_address.api import UpdateAddress
 from apis.v12.update_order.api import UpdateOrder
 from routing.routing_v11 import RoutingV11
 
@@ -44,3 +45,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['get_location_id'] = GetLocationId
         self.routing_collection['add_new_address'] = AddNewAddress
         self.routing_collection['get_addresses'] = GetAddresses
+        self.routing_collection['update_address'] = UpdateAddress

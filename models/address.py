@@ -92,3 +92,31 @@ class Address(models.Model):
         _q = _q.filter(buyer_id=buyer_id)
         addresses = _q.values('id', 'building', 'street', 'state', 'latitude', 'longitude', 'tag')
         return addresses
+
+    @classmethod
+    def update_address(cls, address_id, building_address, street_address, state_address, latitude, longitude, tag):
+        """
+        Updates address
+
+        :param int address_id: address id
+        :param str building_address: building address
+        :param str street_address: street address
+        :param str state_address: state address
+        :param float latitude: latitude
+        :param float longitude: longitude
+        :param str tag: address tag
+        """
+        address = cls.objects.get(id=address_id)
+        if building_address:
+            address.building = building_address
+        if street_address:
+            address.street = street_address
+        if state_address:
+            address.state = state_address
+        if latitude:
+            address.latitude = latitude
+        if longitude:
+            address.longitude = longitude
+        if tag:
+            address.tag = tag
+        address.save()
