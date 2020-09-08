@@ -3,6 +3,7 @@ from apis.v12.add_favourite.api import AddFavourite
 from apis.v12.add_new_address.api import AddNewAddress
 from apis.v12.buyer_orders_listing.api import BuyerOrdersListing
 from apis.v12.cancel_order.api import CancelOrder
+from apis.v12.delete_address.api import DeleteAddress
 from apis.v12.favourites_listing.api import FavouritesListing
 from apis.v12.feedback.api import Feedback
 from apis.v12.get_addresses.api import GetAddresses
@@ -46,3 +47,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['add_new_address'] = AddNewAddress
         self.routing_collection['get_addresses'] = GetAddresses
         self.routing_collection['update_address'] = UpdateAddress
+        self.routing_collection['delete_address'] = DeleteAddress

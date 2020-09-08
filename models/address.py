@@ -120,3 +120,30 @@ class Address(models.Model):
         if tag:
             address.tag = tag
         address.save()
+
+    @classmethod
+    def verify_buyer_address(cls, buyer_id, address_id):
+        """
+        Verifies that either buyer address exists or not
+
+        :param int buyer_id: buyer id
+        :param int address_id: address id
+
+        :rtype bool
+        """
+        _q = cls.objects
+        _q = _q.filter(id=address_id, buyer_id=buyer_id)
+        address = _q.values('id').first()
+        if address:
+            return True
+        return False
+
+    @classmethod
+    def delete_address(cls, address_id):
+        """
+        Deletes address
+
+        :param int address_id: address id
+        """
+        address = cls.objects.get(id=address_id)
+        address.delete()
