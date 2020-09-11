@@ -90,7 +90,7 @@ class PlaceOrder(BasePostResource):
         Places order
         """
         self.order_id = Order.save_order(
-            self.merchant_id, self.buyer_id, self.price, self.is_delivery, self.delivery_address.lower(),
+            self.merchant_id, self.buyer_id, self.price, self.is_delivery, self.delivery_address,
             self.order_number, self.latitude, self.longitude, self.discount
         )
         OrderDetails.save_order_details(self.order_id, self.order_details)
@@ -102,7 +102,8 @@ class PlaceOrder(BasePostResource):
         self.response = {
             'data': {
                 'is_order_placed': True,
-                'order_id': self.order_id
+                'order_id': self.order_id,
+                'order_number': self.order_number
             }
         }
 

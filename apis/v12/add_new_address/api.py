@@ -26,6 +26,7 @@ class AddNewAddress(BasePostResource):
         Initializes class attributes
         """
         self.buyer_id = self.current_user_info.get('buyer_id')
+        self.address_id = 0
 
     def verify_duplicate_address(self):
         """
@@ -57,7 +58,7 @@ class AddNewAddress(BasePostResource):
         """
         Saves address
         """
-        Address.save_address(
+        self.address_id = Address.save_address(
             self.buyer_id, self.building_address, self.street_address, self.state_address, self.latitude,
             self.longitude, self.tag
         )
@@ -68,7 +69,8 @@ class AddNewAddress(BasePostResource):
         """
         self.response = {
             'data': {
-                'is_address_saved': True
+                'is_address_saved': True,
+                'address_id': self.address_id
             }
         }
 

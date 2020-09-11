@@ -108,6 +108,7 @@ class Ingredient(models.Model):
             merchant_latitude=F('menu_item__merchant__latitude'), merchant_longitude=F('menu_item__merchant__longitude'),
             merchant_image_url=F('menu_item__merchant__user__profile_image_url'), menu_id=F('menu_item__menu_id'),
             merchant_address=F('menu_item__merchant__address'), merchant_contact_no=F('menu_item__merchant__contact_no'),
+            merchant_location_id=F('menu_item__merchant__location_id'),
             is_takeaway=F('menu_item__merchant__is_takeaway_enabled'),
             is_delivery=F('menu_item__merchant__is_delivery_enabled')
         )
@@ -143,6 +144,7 @@ class Ingredient(models.Model):
                         'longitude': menu_item_data.get('merchant_longitude'),
                         'address': menu_item_data.get('merchant_address'),
                         'contact_no': menu_item_data.get('merchant_contact_no'),
+                        'location_id': menu_item_data.get('merchant_location_id'),
                         'is_takeaway': menu_item_data.get('is_takeaway'),
                         'is_delivery': menu_item_data.get('is_delivery'),
                     },

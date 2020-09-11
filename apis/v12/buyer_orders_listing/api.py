@@ -1,10 +1,10 @@
-from common.base_resource import BaseGetResource
+from common.base_resource import BasePostResource
 from common.constants import ASSETS_BASE_URL
-from models.order import Order
+from models.order_details import OrderDetails
 from repositories.v12.buyer_repo import BuyerRepository
 
 
-class BuyerOrdersListing(BaseGetResource):
+class BuyerOrdersListing(BasePostResource):
     version = 12
     end_point = 'buyer_orders_listing'
 
@@ -19,7 +19,7 @@ class BuyerOrdersListing(BaseGetResource):
         """
         Gets orders
         """
-        self.orders = Order.get_buyer_orders(self.buyer_id)
+        self.orders = OrderDetails.get_buyer_orders(self.buyer_id)
         if self.orders:
             self.orders_history_exists = True
 
