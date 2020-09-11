@@ -22,6 +22,60 @@ class OrderDetails(models.Model):
         db_table = 'order_details'
 
     @classmethod
+    def get_buyer_orders(cls, buyer_id):
+        """
+        Gets all orders of buyer
+
+        :param int buyer_id: buyer id
+        :rtype list
+        :returns orders list
+        """
+        _q = cls.objects
+        _q = _q.select_related('merchant', 'order')
+        _q = _q.filter(order__buyer_id=buyer_id)
+        orders_data = _q.values(
+            'order_id', status=F('order__status'), order_number=F('order__order_number'),
+            is_delivery=F('order__is_delivery'), delivery_address=F('order__delivery_address'),
+            merchant_name=F('order__merchant__name'), merchant_address=F('order__merchant__address'),
+            order_item_id=F('id'), order_item_quantity=F('item_quantity'), order_item_name=F('item__name'),
+            order_item_price=F('item__price'), order_item_discount=F('item__discount'), order_price=F('order__price'),
+            order_date=F('order__updated_date')
+        )
+        orders = {}
+        for order_data in orders_data:
+            order_id = order_data.get('order_id')
+            if order_id in orders:
+                order_item = {
+                    'item_id': order_data.get('order_item_id'),
+                    'item_name': order_data.get('order_item_name'),
+                    'item_quantity': order_data.get('order_item_quantity'),
+                    'price': order_data.get('order_item_price'),
+                    'discount': order_data.get('order_item_discount')
+                }
+                orders[order_id]['order_items'].append(order_item)
+            else:
+                orders[order_id] = {
+                    'id': order_id,
+                    'status': order_data.get('status'),
+                    'order_number': order_data.get('order_number'),
+                    'price': order_data.get('order_price'),
+                    'is_delivery': bool(order_data.get('is_delivery')),
+                    'delivery_address': order_data.get('delivery_address'),
+                    'merchant_name': order_data.get('merchant_name'),
+                    'merchant_address': order_data.get('merchant_address'),
+                    'date': order_data.get('order_date').strftime('%m/%d/%Y, %H:%M:%S'),
+                    'average_delivery_time': '30 MIN (Dummy Time)',   # TODO: make it dynamic
+                    'order_items': [{
+                        'item_id': order_data.get('order_item_id'),
+                        'item_name': order_data.get('order_item_name'),
+                        'item_quantity': order_data.get('order_item_quantity'),
+                        'price': order_data.get('order_item_price'),
+                        'discount': order_data.get('order_item_discount')
+                    }]
+                }
+        return list(orders.values())
+
+    @classmethod
     def save_order_details(cls, order_id, order_details):
         """
         Saves order details

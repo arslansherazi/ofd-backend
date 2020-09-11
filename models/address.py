@@ -32,12 +32,16 @@ class Address(models.Model):
         :param float latitude: latitude
         :param float longitude: longitude
         :param str tag: address tag
+
+        :rtype int
+        :returns address id
         """
         address = cls(
             buyer_id=buyer_id, building=building_address, street=street_address,
             state=state_address, latitude=latitude, longitude=longitude, tag=tag
         )
         address.save()
+        return address.id
 
     @classmethod
     def get_addresses_count(cls, buyer_id):
@@ -105,6 +109,9 @@ class Address(models.Model):
         :param float latitude: latitude
         :param float longitude: longitude
         :param str tag: address tag
+
+        :rtype int
+        :returns address id
         """
         address = cls.objects.get(id=address_id)
         if building_address:
@@ -120,6 +127,7 @@ class Address(models.Model):
         if tag:
             address.tag = tag
         address.save()
+        return address.id
 
     @classmethod
     def verify_buyer_address(cls, buyer_id, address_id):

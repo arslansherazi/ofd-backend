@@ -80,24 +80,6 @@ class Order(models.Model):
         return orders_data
 
     @classmethod
-    def get_buyer_orders(cls, buyer_id):
-        """
-        Gets all orders of buyer
-
-        :param int buyer_id: buyer id
-        :rtype list
-        :returns orders list
-        """
-        _q = cls.objects
-        _q = _q.select_related('merchant', 'user')
-        _q = _q.filter(buyer_id=buyer_id)
-        orders = _q.values(
-            'status', 'merchant_id', order_id=F('id'), merchant_image_url=F('merchant__user__profile_image_url'),
-            merchant_name=F('merchant__name'),
-        )
-        return orders
-
-    @classmethod
     def get_order_status(cls, order_id, merchant_id=None, buyer_id=None):
         """
         Gets order status.
