@@ -4,6 +4,7 @@ from operator import itemgetter
 
 import bcrypt
 from cryptography.fernet import Fernet
+from exponent_server_sdk import PushClient, PushMessage, PushServerError
 from PIL import Image
 from shapely import wkt
 from shapely.geometry import Point
@@ -165,3 +166,17 @@ class CommonHelpers(object):
         """
         data.sort(key=itemgetter(key), reverse=descending)
         return data
+
+    @staticmethod
+    def send_push_notification(notifications_token, message, data=None):
+        """
+        Sends push notification
+
+        :param str notifications_token: notifications token
+        :param str message: push notification message
+        :param list data: push notification data
+        """
+        try:
+            PushClient().publish(PushMessage(to=notifications_token, body=message, data=data))
+        except PushServerError:
+            pass

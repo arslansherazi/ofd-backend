@@ -12,7 +12,8 @@ SUCCESS_STATUS_CODES = [200, 201]
 IMAGES_BASE_URL = 'https://onlinefooddepot.pythonanywhere.com/ofd_files'
 ASSETS_BASE_URL = 'https://onlinefooddepot.pythonanywhere.com/ofd_assets/'
 BASIC_AUTH_ENDPOINTS = [
-    'login', 'signup', 'validate_email', 'send_email', 'api_token', 'verify_location', 'merchants', 'get_location_id'
+    'login', 'signup', 'validate_email', 'send_email', 'api_token', 'verify_location', 'merchants', 'get_location_id',
+    'make_tiny_url'
 ]
 NO_AUTH_ENDPOINTS = ['verify_email']
 ROUTING_PREFIX = 'ofd_apis/'

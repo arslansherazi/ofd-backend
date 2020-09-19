@@ -108,11 +108,14 @@ class Order(models.Model):
 
         :param int order_id: order id
         :param str status: status
-        :rtype bool
+
+        :rtype str
+        :returns order number
         """
         order = cls.objects.get(id=order_id)
         order.status = status
         order.save()
+        return order.order_number
 
     @classmethod
     def update_orders_price_changed_flag(cls, order_ids, flag=False):
@@ -206,9 +209,12 @@ class Order(models.Model):
         _q = cls.objects
         _q = _q.filter(id=order_id)
         order = _q.values(
-            'is_price_changed', 'is_delivery', 'delivery_address',
+            'is_price_changed', 'is_delivery', 'delivery_address', 'merchant_id',
             is_takeaway_enabled=F('merchant__is_takeaway_enabled'),
-            is_delivery_enabled=F('merchant__is_delivery_enabled')
+            is_delivery_enabled=F('merchant__is_delivery_enabled'),
+            merchant_name=F('merchant__name'), merchant_address=F('merchant__address'),
+            merchant_contact_no=F('merchant__contact_no'), merchant_location_id=F('merchant__location_id'),
+            merchant_image_url=F('merchant__user__profile_image_url')
         ).first()
         return order
 

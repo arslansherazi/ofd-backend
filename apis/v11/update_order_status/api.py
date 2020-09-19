@@ -1,6 +1,8 @@
 from apis.v11.update_order_status.validation import UpdateOrderStatusValidator
 from common.base_resource import BasePostResource
+from common.common_helpers import CommonHelpers
 from models.driver import Driver
+from models.notifications_token import NotificationsToken
 from models.order import Order
 from models.report import Report
 from repositories.v11.merchant_repo import MerchantRepository
@@ -64,6 +66,8 @@ class UpdateOrderStatus(BasePostResource):
                     'message': MerchantRepository.ORDER_STATUS_CHANGE_ERROR_MESSAGE.format(order_status.lower())
                 }
             else:
+                notifications_token = NotificationsToken.get_notifications_token(self.buyer_id)
+                CommonHelpers.send_push_notification(notifications_token, self.status)
                 Order.update_order_status(self.order_id, self.status)
         else:
             self.is_send_response = True
