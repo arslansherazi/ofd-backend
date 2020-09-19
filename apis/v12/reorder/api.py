@@ -79,40 +79,37 @@ class Reorder(BasePostResource):
         """
         order = Order.get_order_data(self.order_id)
         order_items_details = OrderDetails.get_order_items_details(self.order_id)
-        order_price = 0
-        order_discounted_price = 0
-        for order_item_details in order_items_details:
-            price = order_item_details.get('price')
-            quantity = order_item_details.get('quantity')
-            total_price = price * quantity
-            order_item_details['total_price'] = total_price
-            discount = order_item_details.get('discount')
-            if discount:
-                order_item_details['discounted_price'] = round(total_price - ((price / 100) * discount))
-            order_price += total_price
-            order_discounted_price = round(order_discounted_price + ((price / 100) * discount))
-        order_discount = round(((order_price - (order_price - order_discounted_price)) / order_price) * 100)
         is_price_changed = order.get('is_price_changed')
         self.is_send_response = True
         self.response = {
-            'is_price_changed': is_price_changed,
-            'items_details': order_items_details,
-            'order_price': order_price,
-            'is_delivery_enabled': order.get('is_delivery_enabled'),
-            'is_takeaway_enabled': order.get('is_takeaway_enabled'),
-            'delivery_details': {
-                'is_delivery': bool(order.get('is_delivery'))
+            'data': {
+                'is_delivery_changed': False,
+                'is_takeaway_changed': False,
+                'is_price_changed': is_price_changed,
+                'items_details': order_items_details,
+                'merchant_details': {
+                    'id': order.get('merchant_id'),
+                    'name': order.get('merchant_name'),
+                    'address': order.get('merchant_address'),
+                    'contact_no': order.get('merchant_contact_no'),
+                    'location_id': order.get('merchant_location_id'),
+                    'image_url': order.get('merchant_image_url'),
+                    'is_delivery': order.get('is_delivery_enabled'),
+                    'is_takeaway_and_delivery': order.get('is_delivery_enabled') and order.get('is_takeaway_enabled')
+                },
+                'delivery_details': {
+                    'is_delivery': order.get('is_delivery')
+                }
             }
         }
         if order.get('is_delivery'):
-            self.response['delivery_details']['delivery_address'] = order.get('delivery_address')
-        if order_discount:
-            self.response.update(
-                discount='{}%'.format(order_discount), order_discounted_price=order_discounted_price,
-                total_order_discounted_price=round(order_price - order_discounted_price)
-            )
+            self.response['data']['delivery_details']['delivery_address'] = order.get('delivery_address')
         if is_price_changed:
-            self.response.update(message=BuyerRepository.REORDER_PRICE_CHANGE_MESSAGE.format(self.merchant_name))
+            self.response['data']['message'] = BuyerRepository.REORDER_PRICE_CHANGE_MESSAGE.format(self.merchant_name)
+        if order.get('is_delivery') and not order.get('is_delivery_enabled'):
+            self.response['data']['is_delivery_changed'] = True
+        if not order.get('is_delivery') and not order.get('is_takeaway_enabled'):
+            self.response['data']['is_takeaway_changed'] = True
 
     def place_order(self):
         """
@@ -125,7 +122,7 @@ class Reorder(BasePostResource):
             )
             if self.is_price_changed:
                 Order.update_orders_price_changed_flag([self.order_id])
-        Order.update_order_status(self.order_id, MerchantRepository.PlACED_ORDER_STATUS)
+        self.order_number = Order.update_order_status(self.order_id, MerchantRepository.PlACED_ORDER_STATUS)
 
     def prepare_response(self):
         """
@@ -134,7 +131,8 @@ class Reorder(BasePostResource):
         self.response = {
             'data': {
                 'is_reordered': True,
-                'order_id': self.order_id
+                'order_id': self.order_id,
+                'order_number': self.order_number
             }
         }
 

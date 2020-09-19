@@ -12,6 +12,7 @@ from apis.v12.home.api import Home
 from apis.v12.item_details.api import MenuItemDetails
 from apis.v12.items_listing.api import ItemsListing
 from apis.v12.location.api import VerifyLocation
+from apis.v12.make_tiny_url.api import MakeTinyUrl
 from apis.v12.merchants.api import Merchants
 from apis.v12.order_status.api import OrderStatus
 from apis.v12.place_order.api import PlaceOrder
@@ -48,3 +49,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['get_addresses'] = GetAddresses
         self.routing_collection['update_address'] = UpdateAddress
         self.routing_collection['delete_address'] = DeleteAddress
+        self.routing_collection['make_tiny_url'] = MakeTinyUrl

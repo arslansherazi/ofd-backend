@@ -14,6 +14,8 @@ class OrderDetails(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, db_index=True)
     item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, db_index=True)
     item_quantity = models.IntegerField()
+    item_price = models.IntegerField()
+    item_discount = models.IntegerField()
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -38,8 +40,8 @@ class OrderDetails(models.Model):
             is_delivery=F('order__is_delivery'), delivery_address=F('order__delivery_address'),
             merchant_name=F('order__merchant__name'), merchant_address=F('order__merchant__address'),
             order_item_id=F('id'), order_item_quantity=F('item_quantity'), order_item_name=F('item__name'),
-            order_item_price=F('item__price'), order_item_discount=F('item__discount'), order_price=F('order__price'),
-            order_date=F('order__updated_date')
+            order_item_price=F('item_price'), order_item_discount=F('item_discount'), order_price=F('order__price'),
+            order_date=F('order__updated_date'), merchant_id=F('order__merchant__id')
         )
         orders = {}
         for order_data in orders_data:
@@ -63,6 +65,7 @@ class OrderDetails(models.Model):
                     'delivery_address': order_data.get('delivery_address'),
                     'merchant_name': order_data.get('merchant_name'),
                     'merchant_address': order_data.get('merchant_address'),
+                    'merchant_id': order_data.get('merchant_id'),
                     'date': order_data.get('order_date').strftime('%m/%d/%Y, %H:%M:%S'),
                     'average_delivery_time': '30 MIN (Dummy Time)',   # TODO: make it dynamic
                     'order_items': [{
@@ -88,7 +91,9 @@ class OrderDetails(models.Model):
             order_detail_object = cls(
                 order_id=order_id,
                 item_id=order_detail.get('item_id'),
-                item_quantity=order_detail.get('item_quantity')
+                item_quantity=order_detail.get('item_quantity'),
+                item_price=order_detail.get('price'),
+                item_discount=order_detail.get('discount')
             )
             order_details_objects.append(order_detail_object)
         cls.objects.bulk_create(order_details_objects)
@@ -301,8 +306,11 @@ class OrderDetails(models.Model):
         _q = cls.objects
         _q = _q.select_related('item')
         _q = _q.filter(order_id=order_id, item__is_active=True)
-        order_items_details = _q.values(
-            'id', quantity=F('item_quantity'), name=F('item__name'), unit=F('item__unit'),
-            unit_quantity=F('item__quantity'), price=F('item__price'), discount=F('item__discount')
+        order_items_details_data = _q.values(
+            'item_id', 'item_quantity', order_item_id=F('id'), name=F('item__name'), price=F('item__price'),
+            discount=F('item__discount'), image_url=F('item__image_url')
         )
-        return order_items_details
+        for order_items_details in order_items_details_data:
+            order_items_details['is_selected'] = True
+            order_items_details['id'] = order_items_details.get('item_id')
+        return order_items_details_data

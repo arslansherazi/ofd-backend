@@ -2,6 +2,7 @@ from apis.v12.home.validator import HomeValidator
 from common.base_resource import BasePostResource
 from common.common_helpers import CommonHelpers
 from models.ingredient import Ingredient
+from models.notifications_token import NotificationsToken
 from repositories.v12.buyer_repo import BuyerRepository
 
 
@@ -19,6 +20,7 @@ class Home(BasePostResource):
         self.location_id = self.request_args.get('location_id')
         self.is_takeaway = self.request_args.get('is_takeaway')
         self.is_delivery = self.request_args.get('is_delivery')
+        self.notifications_token = self.request_args.get('notifications_token')
 
     def initialize_class_attributes(self):
         """
@@ -26,6 +28,7 @@ class Home(BasePostResource):
         """
         self.home_sections = []
         self.user_id = self.current_user_info.get('user_id')
+        self.buyer_id = self.current_user_info.get('buyer_id')
 
     def set_discounted_section(self):
         """
@@ -90,15 +93,26 @@ class Home(BasePostResource):
             }
             self.home_sections.append(nearby_section)
 
+    def save_notifications_token(self):
+        """
+        Save expo push notifications token into db. It also verifies the duplicate token
+        """
+        is_token_exists = NotificationsToken.verify_duplicate_token(self.buyer_id, self.notifications_token)
+        if not is_token_exists:
+            NotificationsToken.save_notifications_token(self.buyer_id, self.notifications_token)
+
     def prepare_response(self):
         """
         Prepares response
         """
         self.response = {
             'data': {
-                'home_sections': self.home_sections
+                'home_sections': self.home_sections,
+                'is_notifications_token': False
             }
         }
+        if self.notifications_token:
+            self.response['data']['is_notifications_token'] = True
 
     def process_request(self):
         """
@@ -109,4 +123,6 @@ class Home(BasePostResource):
         self.set_discounted_section()
         self.set_top_rated_section()
         self.set_nearby_section()
+        if self.notifications_token:
+            self.save_notifications_token()
         self.prepare_response()

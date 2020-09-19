@@ -7,3 +7,4 @@ class HomeValidator(serializers.Serializer):
     longitude = serializers.FloatField()
     is_takeaway = serializers.BooleanField()
     is_delivery = serializers.BooleanField()
+    notifications_token = serializers.CharField(required=False)

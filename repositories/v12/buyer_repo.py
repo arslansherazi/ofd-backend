@@ -87,9 +87,9 @@ class BuyerRepository(object):
                 order_new_price += total_price
         discount = round(((order_new_price - (order_new_price - order_new_discounted_price)) / order_new_price) * 100)
         if deleted_order_details_ids:
-            OrderDetails.delete_order_items(order_id, deleted_order_details_ids)
+            OrderDetails.delete_order_items(deleted_order_details_ids)
         if updated_items:
-            OrderDetails.update_order_items(order_id, updated_items)
+            OrderDetails.update_order_items(updated_items)
 
         if any([order_new_price, delivery_address, is_delivery, is_takeaway]):
             updated_columns = {}
