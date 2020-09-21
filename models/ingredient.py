@@ -2,6 +2,7 @@ from collections import defaultdict
 
 from django.db import models
 from django.db.models import F
+from django.db.models.functions import Coalesce
 
 from models.favourite import Favourite
 from models.menu_item import MenuItem
@@ -102,12 +103,12 @@ class Ingredient(models.Model):
             ingredient_unit=F('unit'), menu_item_name=F('menu_item__name'),
             menu_item_price=F('menu_item__price'), menu_item_unit=F('menu_item__unit'),
             menu_item_discount=F('menu_item__discount'), menu_item_image_url=F('menu_item__image_url'),
-            menu_item_rating=F('menu_item__rating'), menu_item_rating_count=F('menu_item__rating_count'),
+            menu_item_rating=Coalesce(F('menu_item__rating'), 0), menu_item_rating_count=Coalesce(F('menu_item__rating_count'), 0),  # noqa: 501
             is_active=F('menu_item__is_active'), menu_item_quantity=F('menu_item__quantity'),
             merchant_id=F('menu_item__merchant_id'), merchant_name=F('menu_item__merchant__name'),
-            merchant_latitude=F('menu_item__merchant__latitude'), merchant_longitude=F('menu_item__merchant__longitude'),
+            merchant_latitude=F('menu_item__merchant__latitude'), merchant_longitude=F('menu_item__merchant__longitude'),  # noqa: 501
             merchant_image_url=F('menu_item__merchant__user__profile_image_url'), menu_id=F('menu_item__menu_id'),
-            merchant_address=F('menu_item__merchant__address'), merchant_contact_no=F('menu_item__merchant__contact_no'),
+            merchant_address=F('menu_item__merchant__address'), merchant_contact_no=F('menu_item__merchant__contact_no'),  # noqa: 501
             merchant_location_id=F('menu_item__merchant__location_id'),
             is_takeaway=F('menu_item__merchant__is_takeaway_enabled'),
             is_delivery=F('menu_item__merchant__is_delivery_enabled')

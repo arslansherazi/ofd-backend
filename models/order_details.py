@@ -35,19 +35,22 @@ class OrderDetails(models.Model):
         _q = cls.objects
         _q = _q.select_related('merchant', 'order')
         _q = _q.filter(order__buyer_id=buyer_id)
+        _q = _q.order_by(F('order__updated_date').desc())
         orders_data = _q.values(
-            'order_id', status=F('order__status'), order_number=F('order__order_number'),
+            'id', 'order_id', status=F('order__status'), order_number=F('order__order_number'),
             is_delivery=F('order__is_delivery'), delivery_address=F('order__delivery_address'),
             merchant_name=F('order__merchant__name'), merchant_address=F('order__merchant__address'),
-            order_item_id=F('id'), order_item_quantity=F('item_quantity'), order_item_name=F('item__name'),
+            order_item_id=F('item_id'), order_item_quantity=F('item_quantity'), order_item_name=F('item__name'),
             order_item_price=F('item_price'), order_item_discount=F('item_discount'), order_price=F('order__price'),
-            order_date=F('order__updated_date'), merchant_id=F('order__merchant__id')
+            order_date=F('order__created_date'), merchant_id=F('order__merchant__id'),
+            is_reviewed=F('order__is_reviewed')
         )
         orders = {}
         for order_data in orders_data:
             order_id = order_data.get('order_id')
             if order_id in orders:
                 order_item = {
+                    'id': order_data.get('id'),
                     'item_id': order_data.get('order_item_id'),
                     'item_name': order_data.get('order_item_name'),
                     'item_quantity': order_data.get('order_item_quantity'),
@@ -68,7 +71,9 @@ class OrderDetails(models.Model):
                     'merchant_id': order_data.get('merchant_id'),
                     'date': order_data.get('order_date').strftime('%m/%d/%Y, %H:%M:%S'),
                     'average_delivery_time': '30 MIN (Dummy Time)',   # TODO: make it dynamic
+                    'is_reviewed': order_data.get('is_reviewed'),
                     'order_items': [{
+                        'id': order_data.get('id'),
                         'item_id': order_data.get('order_item_id'),
                         'item_name': order_data.get('order_item_name'),
                         'item_quantity': order_data.get('order_item_quantity'),

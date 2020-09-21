@@ -5,8 +5,9 @@ from apis.v12.buyer_orders_listing.api import BuyerOrdersListing
 from apis.v12.cancel_order.api import CancelOrder
 from apis.v12.delete_address.api import DeleteAddress
 from apis.v12.favourites_listing.api import FavouritesListing
-from apis.v12.feedback.api import Feedback
+from apis.v12.feedback.api import FeedbackApi
 from apis.v12.get_addresses.api import GetAddresses
+from apis.v12.get_feedbacks.api import GetFeedbacks
 from apis.v12.get_location_id.api import GetLocationId
 from apis.v12.home.api import Home
 from apis.v12.item_details.api import MenuItemDetails
@@ -30,7 +31,7 @@ class RoutingV12(RoutingV11):
         super().set_routing_collection()
         self.routing_collection['place_order'] = PlaceOrder
         self.routing_collection['buyer_orders_listing'] = BuyerOrdersListing
-        self.routing_collection['feedback'] = Feedback
+        self.routing_collection['feedback'] = FeedbackApi
         self.routing_collection['order_status'] = OrderStatus
         self.routing_collection['cancel_order'] = CancelOrder
         self.routing_collection['update_order'] = UpdateOrder
@@ -50,3 +51,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['update_address'] = UpdateAddress
         self.routing_collection['delete_address'] = DeleteAddress
         self.routing_collection['make_tiny_url'] = MakeTinyUrl
+        self.routing_collection['get_feedbacks'] = GetFeedbacks
