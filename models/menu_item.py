@@ -102,7 +102,7 @@ class MenuItem(models.Model):
         for menu_item_id in menu_items_ids:
             menu_item = cls.objects.get(id=menu_item_id)
             menu_item_rating = menu_item.rating
-            rating = ratings.get(str(menu_item.id))
+            rating = ratings.get(menu_item.id)
             if not menu_item_rating:
                 menu_item.rating = rating
                 menu_item.total_rating = rating

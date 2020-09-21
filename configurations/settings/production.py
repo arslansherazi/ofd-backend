@@ -8,9 +8,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'HOST': 'onlinefooddepot.mysql.pythonanywhere-services.com',
-        'NAME': 'onlinefooddepot$ofd_db2',
+        'NAME': 'onlinefooddepot$ofd_db_prod',
         'USER': 'onlinefooddepot',
-        'PASSWORD': 'glennmaxwell2018'
+        'PASSWORD': 'ed9389d6-3157-4755-984f'
     }
 }
 API_BASE_URL = 'https://onlinefooddepot.pythonanywhere.com/ofd_apis{}'

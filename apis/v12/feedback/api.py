@@ -1,12 +1,13 @@
 from apis.v12.feedback.validator import FeedbackValidator
 from common.base_resource import BasePostResource
+from models.feedback import Feedback
 from models.menu_item import MenuItem
+from models.order import Order
 from models.order_details import OrderDetails
-from models.review import Review
 from repositories.v12.buyer_repo import BuyerRepository
 
 
-class Feedback(BasePostResource):
+class FeedbackApi(BasePostResource):
     version = 12
     end_point = 'feedback'
     request_validator = FeedbackValidator()
@@ -28,7 +29,7 @@ class Feedback(BasePostResource):
         """
         Verifies that either buyer has order against the items for which buyer is giving feedback
         """
-        items_ids = list(self.feedbacks.keys())
+        items_ids = [int(item_id) for item_id in self.feedbacks.keys()]
         order_items = OrderDetails.verify_buyer_order_items(self.buyer_id, self.order_id, items_ids)
         if not order_items:
             self.is_send_response = True
@@ -45,20 +46,20 @@ class Feedback(BasePostResource):
         2. Updates reviews of order items
         """
         ratings = {}
-        reviews = {}
         for item_id, feedback in self.feedbacks.items():
-            ratings[item_id] = feedback.get('rating')
-            if feedback.get('review'):
-                reviews[item_id] = feedback.get('review')
+            ratings[int(item_id)] = feedback.get('rating')
         MenuItem.save_rating(ratings)
-        Review.save_review(self.buyer_id, reviews)
+        Feedback.save_feedback(self.buyer_id, self.feedbacks)
+        Order.change_review_flag(self.order_id, is_reviewed=True)
 
     def prepare_response(self):
         """
         Prepares response
         """
         self.response = {
-            'message': BuyerRepository.FEEDBACK_SUCCESS_MESSAGE
+            'data': {
+                'message': BuyerRepository.FEEDBACK_SUCCESS_MESSAGE
+            }
         }
 
     def process_request(self):

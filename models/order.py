@@ -20,6 +20,7 @@ class Order(models.Model):
     longitude = models.FloatField(null=True, default=None)
     address_title = models.CharField(max_length=50)
     is_price_changed = models.BooleanField(default=False)
+    is_reviewed = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
@@ -231,3 +232,15 @@ class Order(models.Model):
         _q = _q.filter(id=order_id)
         order = _q.values('price').first()
         return order.get('price')
+
+    @classmethod
+    def change_review_flag(cls, order_id, is_reviewed=False):
+        """
+        Change review flag of order
+
+        :param int order_id: order id
+        :param bool is_reviewed: review flag of order
+        """
+        order = cls.objects.get(id=order_id)
+        order.is_reviewed = is_reviewed
+        order.save()

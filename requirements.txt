@@ -13,6 +13,7 @@ djangorestframework==3.10.3
 djangorestframework-simplejwt==4.4.0
 elastic-apm==5.3.3
 entrypoints==0.3
+exponent-server-sdk==0.3.1
 Faker==4.0.1
 filelock==3.0.12
 flake8==3.7.9
@@ -45,6 +46,7 @@ pymongo==3.10.1
 pyparsing==2.4.6
 pytest==5.3.5
 python-dateutil==2.8.1
+python-Levenshtein==0.12.0
 pytz==2019.2
 PyYAML==5.3.1
 requests==2.22.0
