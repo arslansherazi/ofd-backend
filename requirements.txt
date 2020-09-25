@@ -53,6 +53,7 @@ requests==2.22.0
 routing==0.2.0
 ruamel.yaml==0.16.10
 ruamel.yaml.clib==0.2.0
+schedule==0.6.0
 Shapely==1.7.0
 six==1.14.0
 sqlparse==0.3.0
