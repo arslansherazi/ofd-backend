@@ -25,8 +25,8 @@ class SignupValidator(serializers.Serializer):
     opening_time = serializers.TimeField(required=False)
     closing_time = serializers.TimeField(required=False)
     opening_days = serializers.CharField(required=False, max_length=255)
-    is_open_all_day = serializers.BooleanField()
-    is_open_all_week = serializers.BooleanField()
+    is_open_all_day = serializers.BooleanField(required=False)
+    is_open_all_week = serializers.BooleanField(required=False)
 
     def validate(self, attrs):
         if attrs['user_type'] == MERCHANT_USER_TYPE:
