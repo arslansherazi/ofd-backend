@@ -2,15 +2,16 @@ from configurations.settings.common import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['onlinefooddepot.pythonanywhere.com']
+ALLOWED_HOSTS = ['ofd.pythonanywhere.com']
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'onlinefooddepot.mysql.pythonanywhere-services.com',
-        'NAME': 'onlinefooddepot$ofd_db_prod',
-        'USER': 'onlinefooddepot',
-        'PASSWORD': 'ed9389d6-3157-4755-984f'
+        'HOST': 'ofd.mysql.pythonanywhere-services.com',
+        'NAME': 'ofd$ofd_db_prod',
+        'USER': 'ofd',
+        'PASSWORD': 'ed9389d6-3157-4755-984f',
+        'PORT': 3306
     }
 }
 API_BASE_URL = 'https://onlinefooddepot.pythonanywhere.com/ofd_apis{}'
