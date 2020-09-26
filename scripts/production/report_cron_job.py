@@ -3,12 +3,12 @@ import sys
 from datetime import date
 
 import schedule
-from django.conf import settings
 
-PACKAGE_PARENT = '..'
+from wrappers.py_sql import PySQL
+
+PACKAGE_PARENT = '../../'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
-from wrappers.py_sql import PySQL
 
 
 def reset_last_day_report(py_sql):
@@ -29,11 +29,11 @@ def reset_last_month_report():
 
 if __name__ == '__main__':
     connection = {
-        'host': settings.DATABASES.get('default').get('HOST'),
+        'host': 'onlinefooddepot.mysql.pythonanywhere-services.com',
         'port': 3306,
-        'database': settings.DATABASES.get('default').get('NAME'),
-        'user': settings.DATABASES.get('default').get('USER'),
-        'password': settings.DATABASES.get('default').get('PASSWORD')
+        'database': 'onlinefooddepot$ofd_db_prod',
+        'user': 'onlinefooddepot',
+        'password': 'ed9389d6-3157-4755-984f'
     }
     py_sql = PySQL(**connection)
     schedule.every().day.at('00:00').do(reset_last_day_report, py_sql)
