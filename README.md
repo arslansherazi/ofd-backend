@@ -26,7 +26,7 @@ Draw polygon on map to get location boundry
 http://apps.headwallphotonics.com/
 ~~~
 ~~~
-https://geojson.io/#map=2/20.0/0.0
+https://geojson.io/#map=2/20.0/0.0 (recommended)
 ~~~
 Install GDL on MAC OS
 ~~~
