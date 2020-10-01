@@ -43,7 +43,9 @@ class OrderDetails(models.Model):
             order_item_id=F('item_id'), order_item_quantity=F('item_quantity'), order_item_name=F('item__name'),
             order_item_price=F('item_price'), order_item_discount=F('item_discount'), order_price=F('order__price'),
             order_date=F('order__created_date'), merchant_id=F('order__merchant__id'),
-            is_reviewed=F('order__is_reviewed')
+            is_reviewed=F('order__is_reviewed'), merchant_latitude=F('order__merchant__latitude'),
+            merchant_longitude=F('order__merchant__longitude'), latitude=F('order__latitude'),
+            longitude=F('order__longitude')
         )
         orders = {}
         for order_data in orders_data:
@@ -70,7 +72,6 @@ class OrderDetails(models.Model):
                     'merchant_address': order_data.get('merchant_address'),
                     'merchant_id': order_data.get('merchant_id'),
                     'date': order_data.get('order_date').strftime('%m/%d/%Y, %H:%M:%S'),
-                    'average_delivery_time': '30 MIN (Dummy Time)',   # TODO: make it dynamic
                     'is_reviewed': order_data.get('is_reviewed'),
                     'order_items': [{
                         'id': order_data.get('id'),
@@ -81,6 +82,12 @@ class OrderDetails(models.Model):
                         'discount': order_data.get('order_item_discount')
                     }]
                 }
+                if order_data.get('status').lower() not in ['completed', 'cancelled']:
+                    orders[order_id]['average_delivery_time'] = CommonHelpers.calculate_delivery_time(
+                        latitude=order_data.get('latitude'), longitude=order_data.get('longitude'),
+                        merchant_latitude=order_data.get('merchant_latitude'),
+                        merchant_longitude=order_data.get('merchant_longitude')
+                    )
         return list(orders.values())
 
     @classmethod

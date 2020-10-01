@@ -3,13 +3,15 @@ import random
 from operator import itemgetter
 
 import bcrypt
+import geopy.distance
 from cryptography.fernet import Fernet
 from exponent_server_sdk import PushClient, PushMessage, PushServerError
 from PIL import Image
 from shapely import wkt
 from shapely.geometry import Point
 
-from common.constants import (MENU_IMAGE_DIMENSIONS,
+from common.constants import (AVERAGE_PREPARATION_TIME, BUFFER_TIME,
+                              MENU_IMAGE_DIMENSIONS,
                               MENU_ITEM_IMAGE_DIMENSIONS,
                               PROFILE_IMAGE_DIMENSIONS)
 from models.location import Location
@@ -180,3 +182,30 @@ class CommonHelpers(object):
             PushClient().publish(PushMessage(to=notifications_token, body=message, data=data))
         except PushServerError:
             pass
+
+    @staticmethod
+    def calculate_delivery_time(latitude, longitude, merchant_latitude, merchant_longitude):
+        """
+        Calculates delivery time along with unit
+
+        :param float latitude: buyer latitude
+        :param float longitude: buyer longitude
+        :param float merchant_latitude: merchant latitude
+        :param float merchant_longitude: merchant longitude
+
+        :rtype str
+        :returns delivery time with unit
+        """
+        merchant_location = (merchant_latitude, merchant_longitude)
+        buyer_location = (latitude, longitude)
+        distance = geopy.distance.vincenty(merchant_location, buyer_location).km
+        delivery_time = round(distance + AVERAGE_PREPARATION_TIME + BUFFER_TIME)
+        if delivery_time <= 60:
+            delivery_time_with_unit = '{} MIN'.format(delivery_time)
+        else:
+            delivery_time_hours = delivery_time // 60
+            delivery_time_minutes = delivery_time % 60
+            delivery_time_with_unit = '{hours} HRS {minutes} MIN'.format(
+                hours=delivery_time_hours, minutes=delivery_time_minutes
+            )
+        return delivery_time_with_unit
