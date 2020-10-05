@@ -184,7 +184,9 @@ class CommonHelpers(object):
             pass
 
     @staticmethod
-    def calculate_delivery_time(latitude, longitude, merchant_latitude, merchant_longitude):
+    def calculate_delivery_time_and_distance(
+            latitude, longitude, merchant_latitude, merchant_longitude, is_delivery=False
+    ):
         """
         Calculates delivery time along with unit
 
@@ -192,6 +194,7 @@ class CommonHelpers(object):
         :param float longitude: buyer longitude
         :param float merchant_latitude: merchant latitude
         :param float merchant_longitude: merchant longitude
+        :param bool is_delivery: delivery flag
 
         :rtype str
         :returns delivery time with unit
@@ -199,13 +202,24 @@ class CommonHelpers(object):
         merchant_location = (merchant_latitude, merchant_longitude)
         buyer_location = (latitude, longitude)
         distance = geopy.distance.vincenty(merchant_location, buyer_location).km
-        delivery_time = round(distance + AVERAGE_PREPARATION_TIME + BUFFER_TIME)
-        if delivery_time <= 60:
-            delivery_time_with_unit = '{} MIN'.format(delivery_time)
+        if is_delivery:
+            delivery_time = round(distance + AVERAGE_PREPARATION_TIME + BUFFER_TIME)
+            if delivery_time <= 60:
+                delivery_time_with_unit = '{} MIN'.format(delivery_time)
+            else:
+                delivery_time_hours = delivery_time // 60
+                delivery_time_minutes = delivery_time % 60
+                delivery_time_with_unit = '{hours} HRS {minutes} MIN'.format(
+                    hours=delivery_time_hours, minutes=delivery_time_minutes
+                )
+            return delivery_time_with_unit
         else:
-            delivery_time_hours = delivery_time // 60
-            delivery_time_minutes = delivery_time % 60
-            delivery_time_with_unit = '{hours} HRS {minutes} MIN'.format(
-                hours=delivery_time_hours, minutes=delivery_time_minutes
+            distance_unit = 'km'
+            if not distance >= 1:
+                distance = distance * 1000
+                distance_unit = 'm'
+            distance = round(distance, 2)
+            distance_with_unit = '{distance} {unit}'.format(
+                distance=distance, unit=distance_unit
             )
-        return delivery_time_with_unit
+            return distance_with_unit

@@ -45,7 +45,9 @@ class CancelOrder(BasePostResource):
         """
         if self.is_order_cancelled:
             self.response = {
-                'message': MerchantRepository.ORDER_CANCELLATION_SUCCESS_MESSAGE
+                'data': {
+                    'is_order_cancelled': True
+                }
             }
         else:
             self.status_code = 422

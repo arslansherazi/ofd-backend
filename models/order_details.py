@@ -24,17 +24,21 @@ class OrderDetails(models.Model):
         db_table = 'order_details'
 
     @classmethod
-    def get_buyer_orders(cls, buyer_id):
+    def get_buyer_orders(cls, buyer_id=None, order_id=None):
         """
         Gets all orders of buyer
 
         :param int buyer_id: buyer id
+        :param int order_id: order id
         :rtype list
         :returns orders list
         """
         _q = cls.objects
         _q = _q.select_related('merchant', 'order')
-        _q = _q.filter(order__buyer_id=buyer_id)
+        if buyer_id:
+            _q = _q.filter(order__buyer_id=buyer_id)
+        else:
+            _q = _q.filter(order_id=order_id)
         _q = _q.order_by(F('order__updated_date').desc())
         orders_data = _q.values(
             'id', 'order_id', status=F('order__status'), order_number=F('order__order_number'),
@@ -82,13 +86,20 @@ class OrderDetails(models.Model):
                         'discount': order_data.get('order_item_discount')
                     }]
                 }
-                if order_data.get('status').lower() not in ['completed', 'cancelled']:
-                    orders[order_id]['average_delivery_time'] = CommonHelpers.calculate_delivery_time(
+                if (
+                        order_data.get('is_delivery', False) and
+                        order_data.get('status').lower() not in ['cancelled', 'completed']
+                ):
+                    orders[order_id]['average_delivery_time'] = CommonHelpers.calculate_delivery_time_and_distance(
                         latitude=order_data.get('latitude'), longitude=order_data.get('longitude'),
                         merchant_latitude=order_data.get('merchant_latitude'),
-                        merchant_longitude=order_data.get('merchant_longitude')
+                        merchant_longitude=order_data.get('merchant_longitude'),
+                        is_delivery=True
                     )
-        return list(orders.values())
+        if buyer_id:
+            return list(orders.values())
+        else:
+            return orders.get(order_id, {})
 
     @classmethod
     def save_order_details(cls, order_id, order_details):

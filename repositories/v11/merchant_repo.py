@@ -29,7 +29,6 @@ class MerchantRepository(object):
     MENU_UPDATE_SUCCESS_MESSAGE = 'Menu is updated successfully'
     MENU_DELETED_SUCCESSFULLY_MESSAGE = 'Menu is deleted successfully'
     MENU_CONTAINS_ORDERS_MESSAGE = 'Some of the items in the menu are participating in running orders. Please complete these orders first to delete this menu'  # noqa: 501
-    ORDER_CANCELLATION_SUCCESS_MESSAGE = 'Order is cancelled successfully'
     ORDER_FAILED_MESSAGE = 'Order cannot be {}'
     ORDER_SUCCESS_MESSAGE = 'Order is {} successfully'
     ORDER_SAME_STATUS_MESSAGE = 'Order is already {}'
@@ -43,6 +42,7 @@ class MerchantRepository(object):
     MERCHANT_NOT_EXISTS_MESSAGE = '{} is no longer available'
     INVALID_ADDRESS_MESSAGE = 'Address is not correct'
     INVALID_LOCATION_ADDRESS_MESSAGE = 'Sorry\nThis address does not lie within your location'
+    NOTIFICATION_BODY = 'You order from {merchant_name} is {status}'
 
     @staticmethod
     def verify_merchant_availability(merchant_id):
