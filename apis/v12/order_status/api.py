@@ -1,5 +1,6 @@
 from apis.v12.order_status.validator import OrderStatusValidator
 from common.base_resource import BasePostResource
+from models.driver import Driver
 from models.order import Order
 from repositories.v11.merchant_repo import MerchantRepository
 
@@ -42,6 +43,8 @@ class OrderStatus(BasePostResource):
                 'status': self.order_status
             }
         }
+        if self.order_status == MerchantRepository.ON_ROUTE_ORDER_STATUS:
+            self.response['data']['driver_info'] = Driver.get_driver_info(self.order_id)
 
     def process_request(self):
         """

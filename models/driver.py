@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Value
+from django.db.models.functions import Concat
 
 from models.order import Order
 
@@ -35,3 +37,19 @@ class Driver(models.Model):
             vehicle_number=vehicle_number, contact_no=contact_no
         )
         driver.save()
+
+    @classmethod
+    def get_driver_info(cls, order_id):
+        """
+        Gets driver info of order
+
+        :param int order_id: order id
+        :returns driver info
+        :rtype dict
+        """
+        _q = cls.objects
+        _q = _q.filter(order_id=order_id)
+        driver_info = _q.values(
+            'vehicle_model', 'vehicle_number', 'contact_no', name=Concat('first_name', Value(' '), 'last_name')
+        ).first()
+        return driver_info

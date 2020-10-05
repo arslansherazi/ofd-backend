@@ -275,7 +275,7 @@ class Merchant(models.Model):
         :rtype dict
         :return: merchant profile
         """
-        _q = cls.obejcts
+        _q = cls.objects
         _q = _q.select_related('user')
         _q = _q.filter(id=merchant_id)
         merchant_profile = _q.values(

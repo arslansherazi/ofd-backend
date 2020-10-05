@@ -1,5 +1,6 @@
 from apis.v12.reorder.validator import ReorderValidator
 from common.base_resource import BasePostResource
+from common.common_helpers import CommonHelpers
 from models.merchant import Merchant
 from models.order import Order
 from models.order_details import OrderDetails
@@ -104,6 +105,16 @@ class Reorder(BasePostResource):
         }
         if order.get('is_delivery'):
             self.response['data']['delivery_details']['delivery_address'] = order.get('delivery_address')
+            self.response['data']['delivery_details']['average_delivery_time'] = CommonHelpers.calculate_delivery_time_and_distance(  # noqa: 501
+                latitude=order.get('latitude'), longitude=order.get('longitude'),
+                merchant_latitude=order.get('merchant_latitude'), merchant_longitude=order.get('merchant_longitude'),
+                is_delivery=True
+            )
+        else:
+            self.response['data']['delivery_details']['merchant_distance'] = CommonHelpers.calculate_delivery_time_and_distance(  # noqa: 501
+                latitude=order.get('latitude'), longitude=order.get('longitude'),
+                merchant_latitude=order.get('merchant_latitude'), merchant_longitude=order.get('merchant_longitude')
+            )
         if is_price_changed:
             self.response['data']['message'] = BuyerRepository.REORDER_PRICE_CHANGE_MESSAGE.format(self.merchant_name)
         if order.get('is_delivery') and not order.get('is_delivery_enabled'):

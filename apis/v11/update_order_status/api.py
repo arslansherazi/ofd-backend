@@ -2,8 +2,10 @@ from apis.v11.update_order_status.validation import UpdateOrderStatusValidator
 from common.base_resource import BasePostResource
 from common.common_helpers import CommonHelpers
 from models.driver import Driver
+from models.merchant import Merchant
 from models.notifications_token import NotificationsToken
 from models.order import Order
+from models.order_details import OrderDetails
 from models.report import Report
 from repositories.v11.merchant_repo import MerchantRepository
 
@@ -40,8 +42,8 @@ class UpdateOrderStatus(BasePostResource):
         order_status = Order.get_order_status(self.order_id, self.merchant_id, self.buyer_id)
         if order_status:
             if (
-                    self.status in [MerchantRepository.ACCEPTED_ORDER_STATUS, MerchantRepository.REJECTED_ORDER_STATUS] and
-                    order_status != MerchantRepository.PlACED_ORDER_STATUS
+                    self.status in [MerchantRepository.ACCEPTED_ORDER_STATUS, MerchantRepository.REJECTED_ORDER_STATUS]
+                    and order_status != MerchantRepository.PlACED_ORDER_STATUS
             ):
                 self.is_send_response = True
                 self.status_code = 422
@@ -66,9 +68,14 @@ class UpdateOrderStatus(BasePostResource):
                     'message': MerchantRepository.ORDER_STATUS_CHANGE_ERROR_MESSAGE.format(order_status.lower())
                 }
             else:
-                notifications_token = NotificationsToken.get_notifications_token(self.buyer_id)
-                CommonHelpers.send_push_notification(notifications_token, self.status)
                 Order.update_order_status(self.order_id, self.status)
+                notifications_token = NotificationsToken.get_notifications_token(self.buyer_id)
+                merchant_profile = Merchant.get_profile(self.merchant_id)
+                notification_body = MerchantRepository.NOTIFICATION_BODY.format(
+                    merchant_name=merchant_profile.get('name'), status=self.status
+                )
+                notification_data = OrderDetails.get_buyer_orders(order_id=self.order_id)
+                CommonHelpers.send_push_notification(notifications_token, notification_body, notification_data)
         else:
             self.is_send_response = True
             self.status_code = 422

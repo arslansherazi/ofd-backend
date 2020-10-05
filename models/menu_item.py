@@ -111,7 +111,7 @@ class MenuItem(models.Model):
                 rating_count = menu_item.rating_count + 1
                 menu_item_rating = (menu_item.total_rating + rating) / rating_count
                 menu_item.total_rating += rating
-                menu_item.rating = menu_item_rating
+                menu_item.rating = round(menu_item_rating, 1)
                 menu_item.rating_count = rating_count
             menu_items.append(menu_item)
         cls.objects.bulk_update(menu_items, ['rating', 'rating_count', 'total_rating'])
