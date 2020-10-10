@@ -1,6 +1,7 @@
 from apis.v11.report.api import ReportApi
 from apis.v12.add_favourite.api import AddFavourite
 from apis.v12.add_new_address.api import AddNewAddress
+from apis.v12.add_notifications_token.api import AddNotificationsToken
 from apis.v12.buyer_orders_listing.api import BuyerOrdersListing
 from apis.v12.cancel_order.api import CancelOrder
 from apis.v12.delete_address.api import DeleteAddress
@@ -52,3 +53,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['delete_address'] = DeleteAddress
         self.routing_collection['make_tiny_url'] = MakeTinyUrl
         self.routing_collection['get_feedbacks'] = GetFeedbacks
+        self.routing_collection['add_notifications_token'] = AddNotificationsToken

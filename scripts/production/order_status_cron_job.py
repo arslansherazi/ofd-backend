@@ -5,12 +5,12 @@ import geopy.distance
 import schedule
 from exponent_server_sdk import PushClient, PushMessage, PushServerError
 
-from common.constants import AVERAGE_PREPARATION_TIME, BUFFER_TIME
-from wrappers.py_sql import PySQL
-
 PACKAGE_PARENT = '../../'
 SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
 sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
+
+from common.constants import AVERAGE_PREPARATION_TIME, BUFFER_TIME
+from wrappers.py_sql import PySQL
 
 
 def send_notifications(status, py_sql, orders_ids=None, is_completed=False):
