@@ -58,7 +58,7 @@ class Ingredient(models.Model):
     def get_items_data(
             cls, menu_id=None, merchant_id=None, is_menu_items=False, location_id=None, is_takeaway=False,
             is_delivery=False, is_discounted=False, is_top_rated=False, is_buyer=False, user_id=None,
-            menu_items_ids=None, query=None
+            menu_items_ids=None, query=None, item_id=None
     ):
         """
         Gets items data
@@ -75,6 +75,7 @@ class Ingredient(models.Model):
         :param int user_id: user id
         :param list menu_items_ids: menu items ids
         :param str query: search query
+        :param int item_id: menu item id
         :rtype list
         :return: items data
         """
@@ -98,6 +99,8 @@ class Ingredient(models.Model):
             _q = _q.filter(menu_item__id__in=menu_items_ids)
         if query:
             _q = _q.filter(menu_item__name=query)
+        if item_id:
+            _q = _q.filter(menu_item__id=item_id)
         menu_items_data = _q.values(
             'menu_item_id', ingredient_id=F('id'), ingredient_name=F('name'), ingredient_quantity=F('quantity'),
             ingredient_unit=F('unit'), menu_item_name=F('menu_item__name'),
@@ -157,6 +160,8 @@ class Ingredient(models.Model):
             menu_item_id = menu_item_data.get('menu_item_id')
             if menu_item_id in favourites_menu_items_ids:
                 menu_items[menu_item_id]['is_favourite'] = True
+        if item_id:
+            return list(menu_items.values())[0]
         return list(menu_items.values())
 
     @classmethod

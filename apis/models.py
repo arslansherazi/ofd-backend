@@ -141,10 +141,8 @@ class User(AbstractBaseUser):
         _q = _q.filter(id=user_id, change_password_token=change_password_token)
         forgot_password_data = _q.values(
             'forgot_password_code', 'forgot_password_code_expiration'
-        )
-        if forgot_password_data:
-            return forgot_password_data[0]
-        return {}
+        ).first()
+        return forgot_password_data
 
     @classmethod
     def get_email_verification_code_and_expiration(cls, user_id):
@@ -160,8 +158,8 @@ class User(AbstractBaseUser):
         _q = _q.filter(id=user_id)
         email_verification_data = _q.values(
             'is_email_verified', 'email_verification_code', 'email_verification_code_expiration'
-        )
-        return email_verification_data[0]
+        ).first()
+        return email_verification_data
 
     @classmethod
     def get_change_email_code_and_expiration(cls, user_id, email):
@@ -176,10 +174,8 @@ class User(AbstractBaseUser):
         """
         _q = cls.objects
         _q = _q.filter(id=user_id, email=email)
-        change_email_data = _q.values('change_email_code', 'change_email_code_expiration')
-        if change_email_data:
-            return change_email_data[0]
-        return []
+        change_email_data = _q.values('change_email_code', 'change_email_code_expiration').first()
+        return change_email_data
 
     @classmethod
     def update_email_verification_status(cls, user_id):

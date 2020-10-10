@@ -13,3 +13,8 @@ DATABASES = {
 API_BASE_URL = 'http://192.168.43.133:8000/ofd_apis{}'
 BASE_URL = 'http://192.168.43.133:8000'
 AUTH_USER_MODEL = 'apis.User'
+CORS_ALLOWED_ORIGINS = [
+    'https://localhost:3000'
+]
+CORS_ALLOW_ALL_ORIGINS = True
+
