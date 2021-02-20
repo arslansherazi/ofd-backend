@@ -1,11 +1,9 @@
-import logging
-import os
-
 from django.shortcuts import render
 from requests import codes
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
+from common.common_helpers import CommonHelpers
 from common.constants import (BASIC_AUTH_ENDPOINTS, BUYER_USER_TYPE,
                               INTERNAL_SERVER_ERROR_MESSAGE, NO_AUTH_ENDPOINTS,
                               ROUTING_PREFIX, SUCCESS_STATUS_CODES)
@@ -49,7 +47,7 @@ class BaseResource(APIView):
             # self.apm_client.begin_transaction(transaction_type=self.request_path)
             log_file_path = 'logs/apis/{end_point}'.format(end_point=self.end_point)
             log_file = '{end_point}_v{version}.log'.format(end_point=self.end_point, version=self.version)
-            logger = self.get_logger(log_file_path, log_file)
+            logger = CommonHelpers.get_logger(log_file_path, log_file)
             self.process_request()
             return self.send_response()
         except Exception as e:
@@ -86,25 +84,6 @@ class BaseResource(APIView):
                 self.current_user_info.update(buyer_id=Buyer().get_buyer_id(self.request.user.id))
             else:
                 self.current_user_info.update(merchant_id=Merchant().get_merchant_id(self.request.user.id))
-
-    def get_logger(self, log_file_path, log_file):
-        logger = logging.getLogger()
-        if not os.path.isdir(log_file_path):
-            os.makedirs(log_file_path)
-        file_logging_formatter = logging.Formatter('%(asctime)s %(name)s %(message)s')
-        file_handler = logging.FileHandler(filename='{log_file_path}/{log_file}'.format(
-            log_file_path=log_file_path, log_file=log_file
-        ))
-        file_handler.suffix = '%Y-%m-%d'
-        file_handler.setFormatter(file_logging_formatter)
-        file_handler.setLevel(logging.INFO)
-        # apm_handler = LoggingHandler(client=self.apm_client)
-        # apm_handler.setLevel(logging.ERROR)
-        # apm_handler.setFormatter(file_logging_formatter)
-        file_handler.suffix = '%Y-%m-%d'
-        logger.addHandler(file_handler)
-        # logger.addHandler(apm_handler)
-        return logger
 
     def handle_bad_request_response(self, exception):
         param_name = list(exception.detail.keys())[0]

@@ -58,7 +58,7 @@ class Ingredient(models.Model):
     def get_items_data(
             cls, menu_id=None, merchant_id=None, is_menu_items=False, location_id=None, is_takeaway=False,
             is_delivery=False, is_discounted=False, is_top_rated=False, is_buyer=False, user_id=None,
-            menu_items_ids=None, query=None, item_id=None
+            menu_items_ids=None, query=None, item_id=None, return_ids=False
     ):
         """
         Gets items data
@@ -76,6 +76,7 @@ class Ingredient(models.Model):
         :param list menu_items_ids: menu items ids
         :param str query: search query
         :param int item_id: menu item id
+        :param bool return_ids: ids returning flag
         :rtype list
         :return: items data
         """
@@ -162,6 +163,8 @@ class Ingredient(models.Model):
                 menu_items[menu_item_id]['is_favourite'] = True
         if item_id:
             return list(menu_items.values())[0]
+        if return_ids:
+            return list(menu_items.keys()), list(menu_items.values())
         return list(menu_items.values())
 
     @classmethod

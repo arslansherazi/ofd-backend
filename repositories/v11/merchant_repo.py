@@ -2,7 +2,7 @@ import uuid
 from datetime import datetime
 
 from common.common_helpers import CommonHelpers
-from common.constants import IMAGES_BASE_URL, PNG_IMAGE_EXTENSION
+from common.constants import AWS_S3_BASE_URL, PNG_IMAGE_EXTENSION
 from models.merchant import Merchant
 
 
@@ -103,8 +103,8 @@ class MerchantRepository(object):
         image_name = '{image_id}.{image_extension}'.format(
             image_id=str(uuid.uuid4()), image_extension=PNG_IMAGE_EXTENSION
         )
-        CommonHelpers.upload_image(image, image_name, image_path)
+        CommonHelpers.put_s3_object(image, image_name, image_path)
         image_url = '{base_url}/{image_path}/{image_name}'.format(
-            base_url=IMAGES_BASE_URL, image_path=image_path, image_name=image_name
+            base_url=AWS_S3_BASE_URL, image_path=image_path, image_name=image_name
         )
         return image_url

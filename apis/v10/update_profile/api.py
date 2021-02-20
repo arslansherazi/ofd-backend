@@ -65,7 +65,7 @@ class UpdateProfile(BasePostResource):
                 delete_file_path = delete_file_path.format(
                     user=MERCHANTS, user_id=self.merchant_id
                 )
-            CommonHelpers.remove_file(delete_file_path, old_profile_image_name)
+            CommonHelpers.delete_aws_s3_file(delete_file_path, old_profile_image_name)
         if self.user_type == BUYER_USER_TYPE:
             self.profile_image_url = UserRepository.upload_profile_image(
                 user_type=BUYER_USER_TYPE, image=self.profile_image, buyer_id=self.buyer_id

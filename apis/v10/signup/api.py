@@ -4,7 +4,7 @@ from apis.models import User
 from apis.v10.signup.validator import SignupValidator
 from common.base_resource import BasePostResource
 from common.common_helpers import CommonHelpers
-from common.constants import (IMAGES_BASE_URL, MERCHANT_USER_TYPE,
+from common.constants import (AWS_S3_BASE_URL, MERCHANT_USER_TYPE,
                               PNG_IMAGE_EXTENSION)
 from models.buyer import Buyer
 from models.merchant import Merchant
@@ -105,15 +105,15 @@ class Signup(BasePostResource):
             )
             if self.user_type == MERCHANT_USER_TYPE:
                 image_path = 'merchants/{merchant_id}/profile'.format(merchant_id=self.merchant_id)
-                CommonHelpers.upload_image(image, image_name, image_path)
+                CommonHelpers.put_s3_object(image, image_name, image_path)
                 self.profile_image_url = '{base_url}/{image_path}/{image_name}'.format(
-                    base_url=IMAGES_BASE_URL, image_path=image_path, image_name=image_name
+                    base_url=AWS_S3_BASE_URL, image_path=image_path, image_name=image_name
                 )
             else:
                 image_path = 'buyers/{buyer_id}/profile'.format(buyer_id=self.buyer_id)
-                CommonHelpers.upload_image(image, image_name, image_path)
+                CommonHelpers.put_s3_object(image, image_name, image_path)
                 self.profile_image_url = '{base_url}/{image_path}/{image_name}'.format(
-                    base_url=IMAGES_BASE_URL, image_path=image_path, image_name=image_name
+                    base_url=AWS_S3_BASE_URL, image_path=image_path, image_name=image_name
                 )
 
     def insert_profile_image_url_into_db(self):

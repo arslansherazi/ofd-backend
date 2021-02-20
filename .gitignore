@@ -1,6 +1,7 @@
 venv/
 .idea/
 logs/apis
+logs/aws
 */*/*/__pycache__/
 */*/__pycache__/
 */__pycache__/

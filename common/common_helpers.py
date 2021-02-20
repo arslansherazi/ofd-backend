@@ -1,8 +1,11 @@
+import io
+import logging
 import os
 import random
 from operator import itemgetter
 
 import bcrypt
+import boto3
 import geopy.distance
 from cryptography.fernet import Fernet
 from exponent_server_sdk import PushClient, PushMessage, PushServerError
@@ -10,12 +13,16 @@ from PIL import Image
 from shapely import wkt
 from shapely.geometry import Point
 
-from common.constants import (AVERAGE_PREPARATION_TIME, BUFFER_TIME,
+from common.constants import (AVERAGE_PREPARATION_TIME, AWS_ACL_PUBLIC_READ,
+                              AWS_S3_BUCKET_NAME, AWS_STANDARD_STORAGE_CLASS,
+                              BUFFER_TIME, DEFAULT_LOCATION_ID,
                               MENU_IMAGE_DIMENSIONS,
-                              MENU_ITEM_IMAGE_DIMENSIONS,
+                              MENU_ITEM_IMAGE_DIMENSIONS, PNG_IMAGE_EXTENSION,
                               PROFILE_IMAGE_DIMENSIONS)
 from models.location import Location
-from security.security_credentials import ENCRYPTION_KEY
+from security.security_credentials import (AWS_ACCESS_KEY_ID,
+                                           AWS_SECRET_ACCESS_KEY,
+                                           ENCRYPTION_KEY)
 
 
 class CommonHelpers(object):
@@ -32,38 +39,6 @@ class CommonHelpers(object):
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password.encode(), salt)
         return password_hash.decode()
-
-    # @staticmethod
-    # def pad(data):
-    #     """
-    #     Add padding into data
-    #
-    #     :param data data: data
-    #     :returns: data after adding padding into it
-    #     """
-    #     dummy = data + (AES.block_size - len(data) % AES.block_size) * chr(AES.block_size - len(data) % AES.block_size)
-    #     return dummy
-    #
-    # # @staticmethod
-    # # def unpad(data):
-    # #     """
-    # #     Remove padding from data
-    # #     """
-    # #     return data[:-ord(data[len(data)–1:])]
-    #
-    # @staticmethod
-    # def encrypt_data(data):
-    #     data = CommonHelpers.pad(data)
-    #     aes = AES.new(ENCRYPTION_KEY, mode=AES.MODE_CBC, IV=ENCRYPTION_SALT)
-    #     encrypted_data = aes.encrypt(data)
-    #     return base64.b64encode(encrypted_data).decode()
-    #
-    # @staticmethod
-    # def decrypt_data(encrypted_data):
-    #     encrypted_data = base64.b64decode(encrypted_data)
-    #     aes = AES.new(ENCRYPTION_KEY, mode=AES.MODE_CBC, IV=ENCRYPTION_SALT)
-    #     decrypted_data = aes.decrypt(encrypted_data)
-    #     return decrypted_data.decode()
 
     @staticmethod
     def encrypt_data(data):
@@ -136,6 +111,25 @@ class CommonHelpers(object):
         if os.path.exists(file_path):
             os.remove('{file_path}/{file_name}'.format(file_path=file_path, file_name=file_name))
 
+    @staticmethod
+    def delete_aws_s3_file(file_path, file_name):
+        """
+        Removes file
+
+        :param str file_path: file path
+        :param str file_name: file name
+        """
+        try:
+            file_key = '{file_path}/{file_name}'.format(file_path=file_path, file_name=file_name)
+            bucket = AWS_S3_BUCKET_NAME
+            client = boto3.client(
+                's3', aws_secret_access_key=AWS_SECRET_ACCESS_KEY, aws_access_key_id=AWS_ACCESS_KEY_ID
+            )
+            client.delete_object(Bucket=bucket, Key=file_key)
+        except Exception:
+            logger = CommonHelpers.get_logger(log_file_path='logs/aws', log_file='s3_logs.log')
+            logger.exception('Exception occurred while uploading storage object on AWS S3')
+
     @classmethod
     def get_location_id(cls, latitude, longitude):
         """
@@ -146,14 +140,17 @@ class CommonHelpers(object):
         :rtype int
         :return: location id
         """
-        locations_boundries_data = Location.get_locations_boundries()
-        for location_boundry_data in locations_boundries_data:
-            location_polygon_data = location_boundry_data.get('boundry')
-            user_location = Point(longitude, latitude)
-            location_polygon = wkt.loads(location_polygon_data)
-            if location_polygon.contains(user_location):
-                return location_boundry_data.get('id')
-        return 0
+        try:
+            locations_boundries_data = Location.get_locations_boundries()
+            for location_boundry_data in locations_boundries_data:
+                location_polygon_data = location_boundry_data.get('boundry')
+                user_location = Point(longitude, latitude)
+                location_polygon = wkt.loads(location_polygon_data)
+                if location_polygon.contains(user_location):
+                    return location_boundry_data.get('id')
+            return DEFAULT_LOCATION_ID
+        except Exception:
+            return DEFAULT_LOCATION_ID
 
     @staticmethod
     def sort_list_data(data, key, descending=False):
@@ -223,3 +220,74 @@ class CommonHelpers(object):
                 distance=distance, unit=distance_unit
             )
             return distance_with_unit
+
+    @staticmethod
+    def get_logger(log_file_path, log_file):
+        """
+        Gets logger
+
+        :param str log_file_path: log file path
+        :param str log_file: log file
+
+        :returns logger
+        """
+        logger = logging.getLogger()
+        if not os.path.isdir(log_file_path):
+            os.makedirs(log_file_path)
+        file_logging_formatter = logging.Formatter('%(asctime)s %(name)s %(message)s')
+        file_handler = logging.FileHandler(filename='{log_file_path}/{log_file}'.format(
+            log_file_path=log_file_path, log_file=log_file
+        ))
+        file_handler.suffix = '%Y-%m-%d'
+        file_handler.setFormatter(file_logging_formatter)
+        file_handler.setLevel(logging.INFO)
+        # apm_handler = LoggingHandler(client=self.apm_client)
+        # apm_handler.setLevel(logging.ERROR)
+        # apm_handler.setFormatter(file_logging_formatter)
+        file_handler.suffix = '%Y-%m-%d'
+        logger.addHandler(file_handler)
+        # logger.addHandler(apm_handler)
+        return logger
+
+    @staticmethod
+    def convert_image_to_bytes(image):
+        """
+        Converts image file into bytes. It also converts format of image to png
+
+        :param image: image
+        """
+        in_mem_file = io.BytesIO()
+        image.save(in_mem_file, format='PNG')
+        return in_mem_file.getvalue()
+
+    @staticmethod
+    def put_s3_object(file, file_name, file_path=None):
+        """
+        Puts storage object into s3
+
+        :param file: file
+        :param str file_name: file name
+        :param str file_path: file path
+
+        :rtype bool
+        :returns file uploading flag
+        """
+        try:
+            is_object_uploaded = True
+            file_key = file_name
+            bucket = AWS_S3_BUCKET_NAME
+            client = boto3.client(
+                's3', aws_secret_access_key=AWS_SECRET_ACCESS_KEY, aws_access_key_id=AWS_ACCESS_KEY_ID
+            )
+            if file_path:
+                file_key = '{directory}/{file_name}'.format(directory=file_path, file_name=file_name)
+            if file_name.split('.')[-1] == PNG_IMAGE_EXTENSION:
+                file = CommonHelpers.convert_image_to_bytes(file)
+            client.put_object(
+                Bucket=bucket, Key=file_key, Body=file, ACL=AWS_ACL_PUBLIC_READ, StorageClass=AWS_STANDARD_STORAGE_CLASS
+            )
+        except Exception:
+            logger = CommonHelpers.get_logger(log_file_path='logs/aws', log_file='s3_logs.log')
+            logger.exception('Exception occurred while uploading storage object on AWS S3')
+            is_object_uploaded = False
+        return is_object_uploaded

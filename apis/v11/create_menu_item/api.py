@@ -3,7 +3,7 @@ import uuid
 from apis.v11.create_menu_item.validator import CreateMenuItemValidator
 from common.base_resource import BasePostResource
 from common.common_helpers import CommonHelpers
-from common.constants import IMAGES_BASE_URL, PNG_IMAGE_EXTENSION
+from common.constants import AWS_S3_BASE_URL, PNG_IMAGE_EXTENSION
 from models.ingredient import Ingredient
 from models.menu_item import MenuItem
 from models.merchant import Merchant
@@ -73,9 +73,9 @@ class CreateMenuItem(BasePostResource):
             image_id=str(uuid.uuid4()), image_extension=PNG_IMAGE_EXTENSION
         )
         self.image_url = '{base_url}/{image_path}/{image_name}'.format(
-            base_url=IMAGES_BASE_URL, image_path=image_path, image_name=image_name
+            base_url=AWS_S3_BASE_URL, image_path=image_path, image_name=image_name
         )
-        CommonHelpers.upload_image(image, image_name, image_path)
+        CommonHelpers.put_s3_object(image, image_name, image_path)
 
     def save_menu_item_into_db(self):
         """

@@ -32,9 +32,9 @@ class Home(BasePostResource):
         """
         Sets discounted item home section
         """
-        discounted_items = Ingredient.get_items_data(
+        discounted_items_ids, discounted_items = Ingredient.get_items_data(
             location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
-            is_discounted=True, user_id=self.user_id
+            is_discounted=True, user_id=self.user_id, return_ids=True
         )
         if discounted_items:
             discounted_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
@@ -46,15 +46,17 @@ class Home(BasePostResource):
                 'name': BuyerRepository.DISCOUNTED_SECTION_NAME,
                 'items': distinct_discounted_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
+            view_all_section = self.set_view_all_section(discounted_items_ids)
+            discounted_section['items'].append(view_all_section)
             self.home_sections.append(discounted_section)
 
     def set_top_rated_section(self):
         """
         Sets top rates items home section
         """
-        rated_items = Ingredient.get_items_data(
+        rated_items_ids, rated_items = Ingredient.get_items_data(
             location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery, is_top_rated=True,
-            user_id=self.user_id
+            user_id=self.user_id, return_ids=True
         )
         if rated_items:
             rated_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
@@ -66,15 +68,17 @@ class Home(BasePostResource):
                 'name': BuyerRepository.TOP_RATED_SECTION_NAME,
                 'items': distinct_top_rated_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
+            view_all_section = self.set_view_all_section(rated_items_ids)
+            top_rated_section['items'].append(view_all_section)
             self.home_sections.append(top_rated_section)
 
     def set_nearby_section(self):
         """
         Sets nearby section
         """
-        nearby_items = Ingredient.get_items_data(
+        nearby_items_ids, nearby_items = Ingredient.get_items_data(
             location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
-            user_id=self.user_id
+            user_id=self.user_id, return_ids=True
         )
         if nearby_items:
             nearby_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
@@ -89,7 +93,26 @@ class Home(BasePostResource):
                 'name': BuyerRepository.NEARBY_SECTION_NAME,
                 'items': distinct_nearby_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
+            view_all_section = self.set_view_all_section(nearby_items_ids)
+            nearby_section['items'].append(view_all_section)
             self.home_sections.append(nearby_section)
+
+    def set_view_all_section(self, ids):
+        """
+        Sets view all section
+
+        :param list ids: ids
+
+        :rtype dict
+        :returns see all section
+        """
+        view_all_section_id = max(ids) + 1
+        view_all_section = {
+            'id': view_all_section_id,
+            'identifier': 'view_all',
+            'name': 'View All'
+        }
+        return view_all_section
 
     def prepare_response(self):
         """

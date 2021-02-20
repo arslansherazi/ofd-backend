@@ -81,8 +81,8 @@ class UpdateMenuItem(BasePostResource):
             self.image_url = '{base_url}/{image_path}/{image_name}'.format(
                 base_url=IMAGES_BASE_URL, image_path=image_path, image_name=image_name
             )
-            CommonHelpers.remove_file(delete_image_path, old_image_name)
-            CommonHelpers.upload_image(image, image_name, image_path)
+            CommonHelpers.delete_aws_s3_file(delete_image_path, old_image_name)
+            CommonHelpers.put_s3_object(image, image_name, image_path)
 
     def update_menu_item(self):
         """

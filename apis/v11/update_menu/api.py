@@ -39,7 +39,7 @@ class UpdateMenu(BasePostResource):
                 delete_file_path = delete_file_path.format(
                     merchant_id=self.merchant_id, image_name=old_profile_image_name
                 )
-                CommonHelpers.remove_file(delete_file_path, old_profile_image_name)
+                CommonHelpers.delete_aws_s3_file(delete_file_path, old_profile_image_name)
             self.image_url = MerchantRepository.process_menu_image(self.image, self.merchant_id)
 
     def update_menu(self):

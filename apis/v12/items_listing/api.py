@@ -50,7 +50,7 @@ class ItemsListing(BasePostResource):
             for index, item in enumerate(items):
                 items_hash[index] = item.get('name')
             fuzzy_outlets = process.extract(query=self.query, choices=items_hash, limit=FUZZY_SEARCH_RECORDS_LIMIT)
-            if self.is_auto_suggest:
+            if not self.is_auto_suggest:
                 if fuzzy_outlets:
                     for fuzzy_outlet in fuzzy_outlets:
                         if fuzzy_outlet[1] > FUZZY_SCORE:
@@ -64,14 +64,15 @@ class ItemsListing(BasePostResource):
             else:
                 menu_items_data = {}
                 for fuzzy_outlet in fuzzy_outlets:
-                    fuzzy_outlet_id = fuzzy_outlet.get('id')
-                    if fuzzy_outlet_id in menu_items_data:
-                        fuzzy_outlet[fuzzy_outlet_id]['count'] = fuzzy_outlet[fuzzy_outlet_id]['count'] + 1
-                    else:
-                        fuzzy_outlet[fuzzy_outlet_id] = {
-                            'name': fuzzy_outlet.get('name'),
-                            'count': 1
-                        }
+                    if fuzzy_outlet[1] > FUZZY_SCORE:
+                        fuzzy_outlet_name = fuzzy_outlet[0]
+                        if fuzzy_outlet_name in menu_items_data:
+                            menu_items_data[fuzzy_outlet_name]['count'] = menu_items_data[fuzzy_outlet_name]['count'] + 1
+                        else:
+                            menu_items_data[fuzzy_outlet_name] = {
+                                'name': fuzzy_outlet[0],
+                                'count': 1
+                            }
                 self.is_send_response = True
                 self.response = {
                     'data': {
