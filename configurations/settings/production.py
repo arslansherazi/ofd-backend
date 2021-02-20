@@ -2,7 +2,7 @@ from configurations.settings.common import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['ofd.pythonanywhere.com']
+ALLOWED_HOSTS = ['ec2-3-135-230-125.us-east-2.compute.amazonaws.com']
 
 DATABASES = {
     'default': {
@@ -16,5 +16,4 @@ DATABASES = {
 }
 API_BASE_URL = 'https://onlinefooddepot.pythonanywhere.com/ofd_apis{}'
 BASE_URL = 'https://onlinefooddepot.pythonanywhere.com'
-# python any where does not require wsgi configurations. It defines its own wsgi configurations file
 WSGI_APPLICATION = 'configurations.wsgi.application'
