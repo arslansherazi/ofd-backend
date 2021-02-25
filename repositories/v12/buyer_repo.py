@@ -2,6 +2,7 @@ from collections import defaultdict
 
 import geopy.distance
 
+from common.common_helpers import CommonHelpers
 from common.constants import AVERAGE_PREPARATION_TIME, BUFFER_TIME
 from models.order import Order
 from models.order_details import OrderDetails
@@ -163,3 +164,159 @@ class BuyerRepository(object):
                 continue
             items_hash[merchant_id] = item
         return list(items_hash.values())
+
+    @staticmethod
+    def get_discounted_items(
+            location_id, is_takeaway, is_delivery, user_id, latitude, longitude, return_ids=False,
+            distinct_results=False
+    ):
+        """
+        Gets discounted items
+
+        :param int location_id: location id
+        :param bool is_takeaway: takeaway flag
+        :param bool is_delivery: delivery flag
+        :param int user_id: user id
+        :param float latitude: latitude
+        :param float longitude: longitude
+        :param bool return_ids: return ids flag
+        :param bool distinct_results: distinct results flag
+
+        :rtype list
+        :returns discounted items
+        """
+        from models.ingredient import Ingredient
+        if return_ids:
+            discounted_items_ids, discounted_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, is_discounted=True,
+                user_id=user_id, return_ids=return_ids
+            )
+        else:
+            discounted_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, is_discounted=True,
+                user_id=user_id, return_ids=return_ids
+            )
+        if discounted_items:
+            discounted_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
+                latitude, longitude, discounted_items, is_takeaway, is_delivery
+            )
+            discounted_items = CommonHelpers.sort_list_data(discounted_items, key='discount', descending=True)
+            if distinct_results:
+                discounted_items = BuyerRepository.get_distinct_merchants_items(discounted_items)
+            if return_ids:
+                return discounted_items_ids, discounted_items
+            return discounted_items
+        if return_ids:
+            return [], []
+        return []
+
+    @staticmethod
+    def get_top_rated_items(
+            location_id, is_takeaway, is_delivery, user_id, latitude, longitude, return_ids=False,
+            distinct_results=False
+    ):
+        """
+        Gets top rates items
+
+        :param int location_id: location id
+        :param bool is_takeaway: takeaway flag
+        :param bool is_delivery: delivery flag
+        :param int user_id: user id
+        :param float latitude: latitude
+        :param float longitude: longitude
+        :param bool return_ids: return ids flag
+        :param bool distinct_results: distinct results flag
+
+        :rtype list
+        :returns discounted items
+        """
+        from models.ingredient import Ingredient
+        if return_ids:
+            rated_items_ids, top_rated_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, is_top_rated=True,
+                user_id=user_id, return_ids=return_ids
+            )
+        else:
+            top_rated_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, is_top_rated=True,
+                user_id=user_id, return_ids=return_ids
+            )
+        if top_rated_items:
+            top_rated_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
+                latitude, longitude, top_rated_items, is_takeaway, is_delivery
+            )
+            top_rated_items = CommonHelpers.sort_list_data(top_rated_items, key='rating', descending=True)
+            if distinct_results:
+                top_rated_items = BuyerRepository.get_distinct_merchants_items(top_rated_items)
+            if return_ids:
+                return rated_items_ids, top_rated_items
+            return top_rated_items
+        if return_ids:
+            return [], []
+        return []
+
+    @staticmethod
+    def get_nearby_items(
+            location_id, is_takeaway, is_delivery, user_id, latitude, longitude, return_ids=False,
+            distinct_results=False
+    ):
+        """
+        Gets nearby items
+
+        :param int location_id: location id
+        :param bool is_takeaway: takeaway flag
+        :param bool is_delivery: delivery flag
+        :param int user_id: user id
+        :param float latitude: latitude
+        :param float longitude: longitude
+        :param bool return_ids: return ids flag
+        :param bool distinct_results: distinct results flag
+
+        :rtype list
+        :returns discounted items
+        """
+        from models.ingredient import Ingredient
+        if return_ids:
+            nearby_items_ids, nearby_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, user_id=user_id,
+                return_ids=return_ids
+            )
+        else:
+            nearby_items = Ingredient.get_items_data(
+                location_id=location_id, is_takeaway=is_takeaway, is_delivery=is_delivery, user_id=user_id,
+                return_ids=return_ids
+            )
+        if nearby_items:
+            nearby_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
+                latitude, longitude, nearby_items, is_takeaway, is_delivery
+            )
+            if is_takeaway:
+                nearby_items = CommonHelpers.sort_list_data(nearby_items, key='distance')
+            else:
+                nearby_items = CommonHelpers.sort_list_data(nearby_items, key='delivery_time')
+            if distinct_results:
+                nearby_items = BuyerRepository.get_distinct_merchants_items(nearby_items)
+            if return_ids:
+                return nearby_items_ids, nearby_items
+            return nearby_items
+        if return_ids:
+            return [], []
+        return []
+
+    @staticmethod
+    def set_view_all_section(ids):
+        """
+        Sets view all section
+
+        :param list ids: ids
+
+        :rtype dict
+        :returns see all section
+        """
+        view_all_section_id = max(ids) + 1
+        view_all_section = {
+            'id': view_all_section_id,
+            'identifier': 'view_all',
+            'name': 'View All'
+        }
+        return view_all_section

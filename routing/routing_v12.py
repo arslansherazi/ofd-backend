@@ -22,6 +22,7 @@ from apis.v12.remove_favourite.api import RemoveFavourite
 from apis.v12.reorder.api import Reorder
 from apis.v12.update_address.api import UpdateAddress
 from apis.v12.update_order.api import UpdateOrder
+from apis.v12.view_all_items.api import ViewAllItems
 from routing.routing_v11 import RoutingV11
 
 
@@ -54,3 +55,4 @@ class RoutingV12(RoutingV11):
         self.routing_collection['make_tiny_url'] = MakeTinyUrl
         self.routing_collection['get_feedbacks'] = GetFeedbacks
         self.routing_collection['add_notifications_token'] = AddNotificationsToken
+        self.routing_collection['view_all_items'] = ViewAllItems

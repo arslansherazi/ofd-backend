@@ -264,8 +264,8 @@ class User(AbstractBaseUser):
         """
         _q = cls.objects
         _q = _q.filter((Q(email=username) | Q(username=username)), user_type=user_type)
-        user_data = _q.values('id')
-        user_id = user_data[0].get('id')
+        user_data = _q.values('id').first()
+        user_id = user_data.get('id')
         return user_id
 
     @classmethod

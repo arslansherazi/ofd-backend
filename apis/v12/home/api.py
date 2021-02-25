@@ -1,7 +1,5 @@
 from apis.v12.home.validator import HomeValidator
 from common.base_resource import BasePostResource
-from common.common_helpers import CommonHelpers
-from models.ingredient import Ingredient
 from repositories.v12.buyer_repo import BuyerRepository
 
 
@@ -32,21 +30,17 @@ class Home(BasePostResource):
         """
         Sets discounted item home section
         """
-        discounted_items_ids, discounted_items = Ingredient.get_items_data(
+        discounted_items_ids, discounted_items = BuyerRepository.get_discounted_items(
             location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
-            is_discounted=True, user_id=self.user_id, return_ids=True
+            user_id=self.user_id, return_ids=True, latitude=self.latitude, longitude=self.longitude,
+            distinct_results=True
         )
         if discounted_items:
-            discounted_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
-                self.latitude, self.longitude, discounted_items, self.is_takeaway, self.is_delivery
-            )
-            sorted_discounted_items = CommonHelpers.sort_list_data(discounted_items, key='discount', descending=True)
-            distinct_discounted_items = BuyerRepository.get_distinct_merchants_items(sorted_discounted_items)
             discounted_section = {
                 'name': BuyerRepository.DISCOUNTED_SECTION_NAME,
-                'items': distinct_discounted_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
+                'items': discounted_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
-            view_all_section = self.set_view_all_section(discounted_items_ids)
+            view_all_section = BuyerRepository.set_view_all_section(discounted_items_ids)
             discounted_section['items'].append(view_all_section)
             self.home_sections.append(discounted_section)
 
@@ -54,21 +48,17 @@ class Home(BasePostResource):
         """
         Sets top rates items home section
         """
-        rated_items_ids, rated_items = Ingredient.get_items_data(
-            location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery, is_top_rated=True,
-            user_id=self.user_id, return_ids=True
+        rated_items_ids, rated_items = BuyerRepository.get_top_rated_items(
+            location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
+            user_id=self.user_id, return_ids=True, latitude=self.latitude, longitude=self.longitude,
+            distinct_results=True
         )
         if rated_items:
-            rated_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
-                self.latitude, self.longitude, rated_items, self.is_takeaway, self.is_delivery
-            )
-            top_rated_items = CommonHelpers.sort_list_data(rated_items, key='rating', descending=True)
-            distinct_top_rated_items = BuyerRepository.get_distinct_merchants_items(top_rated_items)
             top_rated_section = {
                 'name': BuyerRepository.TOP_RATED_SECTION_NAME,
-                'items': distinct_top_rated_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
+                'items': rated_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
-            view_all_section = self.set_view_all_section(rated_items_ids)
+            view_all_section = BuyerRepository.set_view_all_section(rated_items_ids)
             top_rated_section['items'].append(view_all_section)
             self.home_sections.append(top_rated_section)
 
@@ -76,43 +66,19 @@ class Home(BasePostResource):
         """
         Sets nearby section
         """
-        nearby_items_ids, nearby_items = Ingredient.get_items_data(
+        nearby_items_ids, nearby_items = BuyerRepository.get_nearby_items(
             location_id=self.location_id, is_takeaway=self.is_takeaway, is_delivery=self.is_delivery,
-            user_id=self.user_id, return_ids=True
+            user_id=self.user_id, return_ids=True, latitude=self.latitude, longitude=self.longitude,
+            distinct_results=True
         )
         if nearby_items:
-            nearby_items = BuyerRepository.calculate_distance_btw_buyer_and_merchant(
-                self.latitude, self.longitude, nearby_items, self.is_takeaway, self.is_delivery
-            )
-            if self.is_takeaway:
-                sorted_nearby_items = CommonHelpers.sort_list_data(nearby_items, key='distance')
-            else:
-                sorted_nearby_items = CommonHelpers.sort_list_data(nearby_items, key='delivery_time')
-            distinct_nearby_items = BuyerRepository.get_distinct_merchants_items(sorted_nearby_items)
             nearby_section = {
                 'name': BuyerRepository.NEARBY_SECTION_NAME,
-                'items': distinct_nearby_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
+                'items': nearby_items[:BuyerRepository.HOME_SECTIONS_ITEMS_LIMIT]
             }
-            view_all_section = self.set_view_all_section(nearby_items_ids)
+            view_all_section = BuyerRepository.set_view_all_section(nearby_items_ids)
             nearby_section['items'].append(view_all_section)
             self.home_sections.append(nearby_section)
-
-    def set_view_all_section(self, ids):
-        """
-        Sets view all section
-
-        :param list ids: ids
-
-        :rtype dict
-        :returns see all section
-        """
-        view_all_section_id = max(ids) + 1
-        view_all_section = {
-            'id': view_all_section_id,
-            'identifier': 'view_all',
-            'name': 'View All'
-        }
-        return view_all_section
 
     def prepare_response(self):
         """

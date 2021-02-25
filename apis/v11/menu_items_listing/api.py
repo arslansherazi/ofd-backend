@@ -6,6 +6,7 @@ from common.common_helpers import CommonHelpers
 from common.constants import DEFAULT_ITEMS_LIMIT
 from models.ingredient import Ingredient
 from repositories.v11.merchant_repo import MerchantRepository
+from repositories.v12.buyer_repo import BuyerRepository
 
 
 class MenuItemsListing(BasePostResource):
@@ -34,9 +35,9 @@ class MenuItemsListing(BasePostResource):
         """
         Gets menu items
         """
-        self.menu_items = Ingredient.get_items_data(
+        self.menu_items_ids, self.menu_items = Ingredient.get_items_data(
             menu_id=self.menu_id, merchant_id=self.merchant_id, is_menu_items=True, is_buyer=self.is_buyer,
-            user_id=self.user_id
+            user_id=self.user_id, return_ids=True
         )
         if not self.is_buyer and not self.menu_items:
             self.status_code = 422
@@ -68,6 +69,8 @@ class MenuItemsListing(BasePostResource):
                     if menu_item_id == self.menu_item_id:
                         del self.menu_items[index]
                         break
+            view_all_section = BuyerRepository.set_view_all_section(self.menu_items_ids)
+            self.menu_items.append(view_all_section)
 
     def prepare_response(self):
         """
