@@ -4,12 +4,12 @@ from django.utils import timezone
 from apis.models import User
 from apis.v10.verify_email.validator import VerifyEmailValidator
 from common.base_resource import BaseGetResource
-from common.common_helpers import CommonHelpers
 from common.constants import (CHANGE_PASSWORD_API_ENDPOINT,
                               EMAIL_ALREADY_VERIFIED_MESSAGE,
                               EMAIL_VERIFICATION_LINK_ERROR_MESSAGE,
                               EMAIL_VERIFICATION_MESSAGE, LINK_EXPIRED_MESSAGE,
                               ROUTING_PREFIX, WEB_ROUTING_PREFIX)
+from common.security import AESCipher
 
 
 class VerifyEmail(BaseGetResource):
@@ -25,8 +25,8 @@ class VerifyEmail(BaseGetResource):
         self.code = self.request_args.get('code')
         self.is_forgot_password_code = self.request_args.get('is_forgot_password_code')
         self.is_email_verification_code = self.request_args.get('is_email_verification_code')
-        self.is_email_change_code = self.request_args.get('is_email_change_code')
-        if self.is_email_change_code:
+        self.is_change_email_code = self.request_args.get('is_change_email_code')
+        if self.is_change_email_code:
             self.new_email = self.request_args.get('new_email')
             self.old_email = self.request_args.get('old_email')
         if self.is_forgot_password_code:
@@ -80,12 +80,12 @@ class VerifyEmail(BaseGetResource):
                         routing_prefix=ROUTING_PREFIX, version=self.version,
                         end_point=CHANGE_PASSWORD_API_ENDPOINT
                     )
-                    encrypted_api_path = CommonHelpers.encrypt_data(api_path)
+                    encrypted_api_path = AESCipher.encrypt(api_path)
                     api_url = '{base_url}/{prefix}/{encrypted_api_path}'.format(
                         base_url=settings.BASE_URL, prefix=WEB_ROUTING_PREFIX, encrypted_api_path=encrypted_api_path
                     )
-                    encrypted_user_id = CommonHelpers.encrypt_data(str(self.user_id))
-                    encrypted_change_password_token = CommonHelpers.encrypt_data(self.change_password_token)
+                    encrypted_user_id = AESCipher.encrypt(str(self.user_id))
+                    encrypted_change_password_token = AESCipher.encrypt(self.change_password_token)
                     self.response = {
                         'template_name': 'forgot_password_change_template.html',
                         'template_data': {

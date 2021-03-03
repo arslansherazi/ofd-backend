@@ -4,11 +4,11 @@ from urllib import parse
 
 from django.http import HttpResponse
 
-from common.common_helpers import CommonHelpers
-from common.constants import (
-    BASIC_AUTH_ENDPOINTS, INVALID_AUTHENTICATION_CREDENTIALS_MESSAGE, UNAUTHORIZED_ACCESS_MESSAGE,
-    NOT_FOUND_RESPONSE_MESSAGE, WEB_ROUTING_PREFIX
-)
+from common.constants import (BASIC_AUTH_ENDPOINTS,
+                              INVALID_AUTHENTICATION_CREDENTIALS_MESSAGE,
+                              NOT_FOUND_RESPONSE_MESSAGE,
+                              UNAUTHORIZED_ACCESS_MESSAGE, WEB_ROUTING_PREFIX)
+from common.security import AESCipher
 from security.security_credentials import basic_auth_credentials
 
 
@@ -21,11 +21,11 @@ class BasicAuthenticationMiddleware(object):
     def __call__(self, request):
         # before request
         if request.path.split('/')[1] == WEB_ROUTING_PREFIX:
-            decrypted_path = CommonHelpers.decrypt_data(request.path.split('/')[2])
+            decrypted_path = AESCipher.decrypt(request.path.split('/')[2])
             if request.method == 'GET':
                 request.path = request.path_info = '/{request_path}'.format(request_path=decrypted_path.split('?')[0])
                 request.GET = dict(parse.parse_qsl(parse.urlsplit('?{params}'.format(
-                        params=decrypted_path.split('?')[1]
+                    params=decrypted_path.split('?')[1]
                 )).query))
             elif request.method == 'POST':
                 request.path = request.path_info = '/{request_path}'.format(request_path=decrypted_path)

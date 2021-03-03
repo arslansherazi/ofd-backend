@@ -47,9 +47,9 @@ class AESCipher(object):
 
 
 if __name__ == '__main__':
-    # encrypted_data = 'fv+iszl/ORvEdK/ub2Pku0zXD/ZSjf3GumKdN3ihysPQjuiLTNrA+5WAiZAZk8uk+6l3BzDnnbYCtZtos6/hqgGoRMpq6szwdbxOeJHQ9ITc8Uf+VeQ50wdDau7OZOfEHHZCWsJIC6/+egr5vku679LmNkww8Qo1SwIlwGqVHlzY0oxkx2UBPRJvOEnQUBR1UzdcwRnn05hZozevTGRAJIbVeflQJ/B/JmUthv2fgNHlFPyXA1UfrjIfEB8eiYWoeH+sXEQ8rgnlrsUdTHj1Q/KhEyhjG/kBrn2TUoAJRYK4F3Gy7jTa6Ho2OyZoyHdSYvWgucfEYdVd8rM87n6rrwF7tRSY61ftx9oOcGTJRmDVKR94UmEGgDLMQ6oyh0gAVIq3slG5ya5Cc2IIviohT+gxbfebyQrea5Fbr1WmNFYKOW9omcQf9X6o7rxWVXsODy/ml7FeIpaVActTIDN3OhaBwznMpr27J6RE644Wk6yBPk70S98bsG7mSGD9BTcGRAbryR31t6GEy5lgBPjtF4mkmaoHMmmdEvatnYdWT8UCqqxpdSC5X9w3OiUJcIVvwEoAWsShbjEVIYpZU1dewxpupvv+RRXA+Vx0zr0fbZBNxc8D1N7RefRVbeR4e1x6k0GiUJ1HD18HzfBeLnKld3dMXyPX3dg8GZtIya+wSVKA6GFr+KOE4ZZWCU2AxkKJi8GKYt62OnY+ekSNCVn4TNvUPHvzXd2MQPGjiFWPNqlmKQhEEzfm8lR20pyTpOFKLuC45eiUj1u+BXm1OANBMg=='
-    # decrypted_data = AESCipher.decrypt(encrypted_data)
-    # print(decrypted_data)
-    encrypted_params = AESCipher.encrypt(params.encode())
-    print(encrypted_params)
-    print(AESCipher.decrypt(encrypted_params))
+    encrypted_data = 'h3+s/Efvw/Umf76EH0S5JA=='
+    decrypted_data = AESCipher.decrypt(encrypted_data)
+    print(decrypted_data)
+    # encrypted_params = AESCipher.encrypt(params.encode())
+    # print(encrypted_params)
+    # print(AESCipher.decrypt(encrypted_params))

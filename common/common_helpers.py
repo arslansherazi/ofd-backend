@@ -7,7 +7,6 @@ from operator import itemgetter
 import bcrypt
 import boto3
 import geopy.distance
-from cryptography.fernet import Fernet
 from exponent_server_sdk import PushClient, PushMessage, PushServerError
 from PIL import Image
 from shapely import wkt
@@ -39,18 +38,6 @@ class CommonHelpers(object):
         salt = bcrypt.gensalt()
         password_hash = bcrypt.hashpw(password.encode(), salt)
         return password_hash.decode()
-
-    @staticmethod
-    def encrypt_data(data):
-        cipher_suite = Fernet(ENCRYPTION_KEY.encode())
-        encrypted_data = cipher_suite.encrypt(data.encode())
-        return encrypted_data.decode()
-
-    @staticmethod
-    def decrypt_data(encrypted_data):
-        cipher_suite = Fernet(ENCRYPTION_KEY.encode())
-        decrypted_data = cipher_suite.decrypt(encrypted_data.encode())
-        return decrypted_data.decode()
 
     @staticmethod
     def process_image(image, is_menu_image=False, is_menu_item_image=False, is_profile_image=False):

@@ -4,8 +4,8 @@ from django.utils import timezone
 from apis.models import User
 from apis.v10.change_password.validator import ChangePasswordValidator
 from common.base_resource import BasePostResource
-from common.common_helpers import CommonHelpers
 from common.constants import LINK_EXPIRED_MESSAGE
+from common.security import AESCipher
 from repositories.v10.user_repo import UserRepository
 
 
@@ -21,8 +21,8 @@ class ChangePassword(BasePostResource):
         self.is_forgot_password = self.request_args.get('is_forgot_password')
         self.new_password = self.request_args.get('new_password')
         if self.is_forgot_password:
-            self.encrypted_change_password_token = self.request_args.get('__c_p_t')
-            self.encrypted_user_id = self.request_args.get('__ui')
+            self.encrypted_change_password_token = self.request_args.get('change_password_token')
+            self.encrypted_user_id = self.request_args.get('user_id')
         else:
             self.old_password = self.request_args.get('old_password')
 
@@ -57,8 +57,8 @@ class ChangePassword(BasePostResource):
         password verification is required for new password if user required it using app settings
         """
         if self.is_forgot_password:
-            self.user_id = int(CommonHelpers.decrypt_data(self.encrypted_user_id))
-            change_password_token = CommonHelpers.decrypt_data(self.encrypted_change_password_token)
+            self.user_id = int(AESCipher.decrypt(self.encrypted_user_id))
+            change_password_token = AESCipher.decrypt(self.encrypted_change_password_token)
             forgot_password_data = User.get_forgot_password_email_code_and_expiration(
                 self.user_id, change_password_token
             )

@@ -12,15 +12,18 @@ class AESCipher(object):
 
     @classmethod
     def encrypt(cls, data):
+        if isinstance(data, str):
+            data = data.encode()
         data = cls.pad(data)
         cipher = AES.new(key=ENCRYPTION_KEY, mode=ENCRYPTION_MODE, IV=ENCRYPTION_SALT)
         encrypted_data = cipher.encrypt(data)
         encrypted_data = base64.b64encode(encrypted_data)
-        encrypted_data = encrypted_data.decode(errors='ignore')
+        encrypted_data = encrypted_data.decode(errors='ignore').replace('/', '_')
         return encrypted_data
 
     @classmethod
     def decrypt(cls, encrypted_data):
+        encrypted_data = encrypted_data.replace('_', '/').replace(' ', '+')
         encrypted_data = base64.b64decode(encrypted_data)
         cipher = AES.new(key=ENCRYPTION_KEY, mode=ENCRYPTION_MODE, IV=ENCRYPTION_SALT)
         data = cipher.decrypt(encrypted_data)

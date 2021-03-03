@@ -2,7 +2,7 @@ from configurations.settings.common import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['3.22.125.117', '0.0.0.0']
+ALLOWED_HOSTS = ['ofd-load-balancer-838337192.us-east-2.elb.amazonaws.com', '18.224.5.209']
 
 DATABASES = {
     'default': {
@@ -14,17 +14,7 @@ DATABASES = {
         'PORT': 3306
     }
 }
-API_BASE_URL = 'http://3.22.125.117/ofd_apis{}'
-BASE_URL = 'http://3.22.125.117'
+API_BASE_URL = 'http://18.224.5.209/ofd_apis{}'
+BASE_URL = 'http://18.224.5.209'
 WSGI_APPLICATION = 'configurations.wsgi.application'
 AUTH_USER_MODEL = 'apis.User'
-
-# email configurations
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_SECRET_ACCESS_KEY = 'X57CjN1Xk7zzmryBrAS+ld4/e/Qz+hwF3MlQ+J1P'
-AWS_ACCESS_KEY_ID = 'AKIAIKIAW5FFEWR6MYIQ'
-EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 25
-EMAIL_HOST_USER = 'AKIATFPQJWU3WMG2QIWL'
-EMAIL_HOST_PASSWORD = 'BMCxZXrV31RcsQ/KE6Y0Y9Pk62XsColDeDs0mmvCvmRq'

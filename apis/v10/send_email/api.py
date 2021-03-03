@@ -10,6 +10,7 @@ from common.common_helpers import CommonHelpers
 from common.constants import (CHANGE_PASSWORD_SUBJECT,
                               EMAIL_VERIFICATION_SUBJECT, SYSTEM_SENDER_EMAIL,
                               WEB_ROUTING_PREFIX)
+from common.security import AESCipher
 from repositories.v10.user_repo import UserRepository
 
 
@@ -72,11 +73,11 @@ class SendEmail(BasePostResource):
         else:
             change_email_code = CommonHelpers.generate_six_digit_random_code()
             User.update_change_email_code_and_expiration(self.user_id, change_email_code)
-            email_verification_request = 'ofd_apis/v{api_version}/verify_email?user_id={user_id}&old_email={old_email}&new_email={new_email}&code={code}&is_email_change_code=True'.format(  # noqa: 501
+            email_verification_request = 'ofd_apis/v{api_version}/verify_email?user_id={user_id}&old_email={old_email}&new_email={new_email}&code={code}&is_change_email_code=True'.format(  # noqa: 501
                 api_version=self.version, user_id=self.user_id, old_email=self.email, new_email=self.new_email,
                 code=change_email_code
             )
-        encrypted_verification_request = CommonHelpers.encrypt_data(email_verification_request)
+        encrypted_verification_request = AESCipher.encrypt(str(email_verification_request))
         self.email_verification_link = '{base_url}/{web_routing_prefix}/{encrypted_verification_request}'.format(
             base_url=settings.BASE_URL, web_routing_prefix=WEB_ROUTING_PREFIX,
             encrypted_verification_request=encrypted_verification_request
@@ -94,6 +95,8 @@ class SendEmail(BasePostResource):
             email_verification_text = 'Verify Email'
         from_email = SYSTEM_SENDER_EMAIL
         to_emails = [self.email]
+        if self.is_change_email_code:
+            to_emails = [self.new_email]
         email_verification_template_data = {
             'email_verification_link': self.email_verification_link,
             'email_verification_main_text': email_verification_text.lower(),

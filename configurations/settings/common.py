@@ -75,3 +75,11 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
+
+# email configurations
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AKIATFPQJWU3755XYXHT'
+EMAIL_HOST_PASSWORD = 'BMb/GuVteJ/qopEaP0ZufvrXW0oO0zFwbPf7nviznrFB'
