@@ -20,10 +20,11 @@ WSGI_APPLICATION = 'configurations.wsgi.application'
 AUTH_USER_MODEL = 'apis.User'
 
 # email configurations
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+AWS_SECRET_ACCESS_KEY = 'X57CjN1Xk7zzmryBrAS+ld4/e/Qz+hwF3MlQ+J1P'
+AWS_ACCESS_KEY_ID = 'AKIAIKIAW5FFEWR6MYIQ'
 EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'AKIATFPQJWU3WMG2QIWL'
 EMAIL_HOST_PASSWORD = 'BMCxZXrV31RcsQ/KE6Y0Y9Pk62XsColDeDs0mmvCvmRq'
-

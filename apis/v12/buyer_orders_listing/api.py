@@ -1,5 +1,4 @@
 from common.base_resource import BasePostResource
-from common.constants import ASSETS_BASE_URL
 from models.order_details import OrderDetails
 from repositories.v12.buyer_repo import BuyerRepository
 
@@ -38,9 +37,7 @@ class BuyerOrdersListing(BasePostResource):
             self.response = {
                 'title': BuyerRepository.NO_ORDER_TITLE,
                 'message': BuyerRepository.NO_ORDER_MESSAGE,
-                'image_url': '{assets_base_url}images/{image_name}'.format(
-                    assets_base_url=ASSETS_BASE_URL, image_name=BuyerRepository.NO_ORDERS_IMAGE_NAME
-                )
+                'image_url': BuyerRepository.NO_ORDERS_IMAGE_URL
             }
 
     def process_request(self):

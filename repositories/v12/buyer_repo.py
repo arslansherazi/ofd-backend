@@ -31,11 +31,11 @@ class BuyerRepository(object):
     FAVOURITES_LIMIT_EXCEEDS_MESSAGE = 'Sorry. You can add only 10 favourites'
     NO_FAVOURITES_TITLE = 'No Favourites'
     NO_FAVOURITES_MESSAGE = 'You have not make any favourites yet'
-    NO_FAVOURITES_IMAGE_NAME = 'no_favourites.png'
+    NO_FAVOURITES_IMAGE_URL = 'https://ofd-files.s3.us-east-2.amazonaws.com/ofd-assets/no_favourites.png'
     FAVOURITES_LIMIT = 10
     NO_FAVOURITES_COUNT = 0
     FAVOURITE_NOT_EXISTS_MESSAGE = 'Favourite does not exists'
-    NO_ORDERS_IMAGE_NAME = 'no_orders.png'
+    NO_ORDERS_IMAGE_URL = 'https://ofd-files.s3.us-east-2.amazonaws.com/ofd-assets/no_orders.png'
     OUT_OF_REACH_TITLE = 'Out of our reach'
     OUT_OF_REACH_MESSAGE = 'Sorry, Seems like your address is outside of our service area'
     ADDRESS_LIMIT_EXCEEDS_MESSAGE = 'You can save only {} addresses'

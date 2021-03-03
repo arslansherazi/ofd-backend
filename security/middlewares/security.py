@@ -1,9 +1,9 @@
 import json
 from urllib import parse
 
-from common.common_helpers import CommonHelpers
 from common.constants import (NO_AUTH_ENDPOINTS, NO_ENCRYPTION_ENDPOINTS,
                               SUCCESS_STATUS_CODES)
+from common.security import AESCipher
 from security.security_credentials import ENCRYPTION_DISABLE_KEY
 
 
@@ -25,13 +25,13 @@ class SecurityMiddleware(object):
                 params = {}
             encrypted_params = params.get('__prms')
             if encrypted_params:
-                decrypted_params = CommonHelpers.decrypt_data(encrypted_params)
+                decrypted_params = AESCipher.decrypt(encrypted_params)
                 request.POST = json.loads(decrypted_params)
                 params = json.loads(decrypted_params)
         elif request.method == 'GET':
             encrypted_params = request.GET.get('__prms')
             if encrypted_params:
-                decrypted_params = CommonHelpers.decrypt_data(encrypted_params)
+                decrypted_params = AESCipher.decrypt(encrypted_params)
                 request.GET = dict(parse.parse_qsl(parse.urlsplit('?{decrypted_params}'.format(
                     decrypted_params=decrypted_params
                 )).query))
@@ -50,5 +50,5 @@ class SecurityMiddleware(object):
             if response.status_code in SUCCESS_STATUS_CODES:
                 encryption_disable_key = params.get('encryption_disable_key', '')
                 if encryption_disable_key != ENCRYPTION_DISABLE_KEY:
-                    response.content = CommonHelpers.encrypt_data(str(response))
+                    response.content = AESCipher.encrypt(response.content)
         return response

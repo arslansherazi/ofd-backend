@@ -1,6 +1,5 @@
 from apis.v12.favourites_listing.validator import FavouritesListingValidator
 from common.base_resource import BasePostResource
-from common.constants import ASSETS_BASE_URL
 from models.favourite import Favourite
 from models.ingredient import Ingredient
 from repositories.v12.buyer_repo import BuyerRepository
@@ -36,9 +35,7 @@ class FavouritesListing(BasePostResource):
             self.response = {
                 'title': BuyerRepository.NO_FAVOURITES_TITLE,
                 'message': BuyerRepository.NO_FAVOURITES_MESSAGE,
-                'image_url': '{assets_base_url}images/{image_name}'.format(
-                    assets_base_url=ASSETS_BASE_URL, image_name=BuyerRepository.NO_FAVOURITES_IMAGE_NAME
-                )
+                'image_url': BuyerRepository.NO_FAVOURITES_IMAGE_URL
             }
 
     def get_favourites(self):
