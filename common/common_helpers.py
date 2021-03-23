@@ -12,16 +12,15 @@ from PIL import Image
 from shapely import wkt
 from shapely.geometry import Point
 
+from apps.user.models_v.v100.location import Location
 from common.constants import (AVERAGE_PREPARATION_TIME, AWS_ACL_PUBLIC_READ,
                               AWS_S3_BUCKET_NAME, AWS_STANDARD_STORAGE_CLASS,
                               BUFFER_TIME, DEFAULT_LOCATION_ID,
                               MENU_IMAGE_DIMENSIONS,
                               MENU_ITEM_IMAGE_DIMENSIONS, PNG_IMAGE_EXTENSION,
                               PROFILE_IMAGE_DIMENSIONS)
-from models.location import Location
 from security.security_credentials import (AWS_ACCESS_KEY_ID,
-                                           AWS_SECRET_ACCESS_KEY,
-                                           ENCRYPTION_KEY)
+                                           AWS_SECRET_ACCESS_KEY)
 
 
 class CommonHelpers(object):
@@ -244,7 +243,7 @@ class CommonHelpers(object):
         :param image: image
         """
         in_mem_file = io.BytesIO()
-        image.save(in_mem_file, format='PNG')
+        image.save(in_mem_file, format=PNG_IMAGE_EXTENSION)
         return in_mem_file.getvalue()
 
     @staticmethod

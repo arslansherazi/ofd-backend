@@ -11,7 +11,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apis',
+    'apps.user',
+    'apps.merchant',
+    'apps.buyer',
     'corsheaders',
     'rest_framework'
 ]
@@ -83,3 +85,5 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'AKIATFPQJWU3755XYXHT'
 EMAIL_HOST_PASSWORD = 'BMb/GuVteJ/qopEaP0ZufvrXW0oO0zFwbPf7nviznrFB'
+
+AUTH_USER_MODEL = 'user.User'

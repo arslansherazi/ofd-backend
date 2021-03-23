@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS favourite
 	created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_date TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES apis_user (id),
+    FOREIGN KEY (user_id) REFERENCES user (id),
     FOREIGN KEY (menu_item_id) REFERENCES menu_item (id),
     KEY idx_status (user_id) USING BTREE,
     KEY idx_delivery (menu_item_id) USING BTREE

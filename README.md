@@ -41,3 +41,13 @@ manage.py is development server
 ~~~
 wsgi.py is production server
 ~~~
+
+## Errors Solution
+django.db.migrations.exceptions.CircularDependencyError
+~~~
+1. comment foreign keys from all models 
+2. make migrations and migrate
+3. uncomment foreign keys 
+4. make migrations => set default value for foreign keys (e.g 1)
+5. migrate updated migrations
+~~~

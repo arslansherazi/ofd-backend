@@ -22,11 +22,10 @@ CREATE TABLE IF NOT EXISTS merchant
 	created_date TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
 	updated_date TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
-    FOREIGN KEY (user_id) REFERENCES user (id)
-    FOREIGN KEY (location_id) REFERENCES user (location),
-    KEY idx_name (name) USING BTREE
-    KEY idx_location (location_id) USING BTREE
-    KEY idx_name (name) USING BTREE
-    KEY idx_takeaway (is_takeaway_enabled) USING BTREE
+    FOREIGN KEY (user_id) REFERENCES user (id),
+    FOREIGN KEY (location_id) REFERENCES location (id),
+    KEY idx_name (name) USING BTREE,
+    KEY idx_location (location_id) USING BTREE,
+    KEY idx_takeaway (is_takeaway_enabled) USING BTREE,
     KEY idx_delivery (is_delivery_enabled) USING BTREE
 );

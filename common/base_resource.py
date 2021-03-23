@@ -3,12 +3,12 @@ from requests import codes
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
+from apps.buyer.models.v100.buyer import Buyer
+from apps.merchant.models.v100.merchant import Merchant
 from common.common_helpers import CommonHelpers
 from common.constants import (BASIC_AUTH_ENDPOINTS, BUYER_USER_TYPE,
                               INTERNAL_SERVER_ERROR_MESSAGE, NO_AUTH_ENDPOINTS,
                               ROUTING_PREFIX, SUCCESS_STATUS_CODES)
-from models.buyer import Buyer
-from models.merchant import Merchant
 from security.token_authentication import JWTTokenPermission
 
 
@@ -30,6 +30,7 @@ class BaseResource(APIView):
                 self.request_args = self.request.data
             self.is_send_response = False
             self.response = {}
+            self.current_user_info = {}
             self.http_response = None
             try:
                 if self.request_validator:

@@ -2,7 +2,7 @@ from rest_framework import permissions
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.settings import api_settings
 
-from apis.models import User
+from apps.user.models import User
 from common.constants import (BASIC_AUTH_ENDPOINTS,
                               CHANGE_PASSWORD_API_ENDPOINT, NO_AUTH_ENDPOINTS)
 from common.custom_exception_handler import CustomAPIException
