@@ -12,11 +12,11 @@ class UserRepository(object):
     """
     User Repository
     """
-    USERNAME_ALREADY_EXIST = 'username already exists'
+    USERNAME_ALREADY_EXIST = 'Username already exists'
     USER_LOGGEDIN_ERROR_MESSAGE = 'Password is incorrect'
     EMAIL_VERIFICATION_MESSAGE = 'Email is not verified yet'
-    USER_NOT_EXISTS_IN_SYSTEM_MESSAGE = 'user does not exist in system'
-    EMAIL_EXISTS_IN_SYSTEM_MESSAGE = 'email already registered with us. Please register with some other email'
+    USER_NOT_EXISTS_IN_SYSTEM_MESSAGE = 'User does not exist in system'
+    EMAIL_EXISTS_IN_SYSTEM_MESSAGE = 'Email already registered with us. Please register with some other email'
     EMAIL_ALREADY_REGISTERED_MESSAGE = '{} already registered with us. Please use other email address'
     PASSWORD_UPDATE_SUCCESS_MESSAGE = 'Password is updated successfully'
     INVALID_PASSWORD_MESSAGE = 'Old password is invalid'

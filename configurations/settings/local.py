@@ -10,8 +10,8 @@ DATABASES = {
         'PASSWORD': 'rootroot'
     }
 }
-API_BASE_URL = 'http://192.168.0.104:8000/ofd_apis{}'
-BASE_URL = 'http://192.168.0.104:8000'
+API_BASE_URL = 'http://0.0.0.0:8000/ofd_apis{}'
+BASE_URL = 'http://0.0.0.0:8000'
 CORS_ALLOWED_ORIGINS = [
     'https://localhost:3000'
 ]
