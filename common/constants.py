@@ -11,7 +11,7 @@ PNG_IMAGE_EXTENSION = 'png'
 SUCCESS_STATUS_CODES = [200, 201]
 BASIC_AUTH_ENDPOINTS = [
     'login', 'signup', 'validate_email', 'send_email', 'api_token', 'verify_location', 'merchants', 'get_location_id',
-    'make_tiny_url'
+    'make_tiny_url', 'location_suggestions', 'location_details'
 ]
 NO_AUTH_ENDPOINTS = ['verify_email']
 ROUTING_PREFIX = 'ofd_apis/'
@@ -44,3 +44,5 @@ AWS_ACL_PUBLIC_READ = 'public-read'
 AWS_STANDARD_STORAGE_CLASS = 'STANDARD'
 AWS_S3_BASE_URL = 'https://ofd-files.s3.us-east-2.amazonaws.com'
 DEFAULT_LOCATION_ID = 1
+GOOGLE_AUTO_COMPLETE_API_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={input}&location={location}&radius={radius}&key=AIzaSyA3lJgG2U0aWy2PLOTSW8TqSH832RL0vUU'  # noqa: 501
+GOOGLE_PLACE_DETAILS_API_URL = 'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&key=AIzaSyA3lJgG2U0aWy2PLOTSW8TqSH832RL0vUU'  # noqa: 501

@@ -1,5 +1,4 @@
-from apps.buyer.apis.v100.add_new_address.validator import \
-    AddNewAddressValidator
+from apps.buyer.apis.v100.add_new_address.validator import AddNewAddressValidator
 from apps.buyer.models.v100.address import Address
 from apps.buyer.repositories.v100.buyer_repo import BuyerRepository
 from common.base_resource import BasePostResource
