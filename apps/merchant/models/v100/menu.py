@@ -71,7 +71,7 @@ class Menu(models.Model):
         """
         _q = cls.objects
         _q = _q.filter(merchant_id=merchant_id)
-        menus = _q.values('id', 'name', 'is_active')
+        menus = _q.values('id', 'name', 'is_active', 'image_url')
         if menus:
             return menus
         return []

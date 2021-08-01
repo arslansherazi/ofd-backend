@@ -2,6 +2,7 @@ from apps.buyer.apis.v110.add_favourite.api import AddFavourite
 from apps.buyer.apis.v110.favourites_listing.api import FavouritesListing
 from apps.buyer.apis.v110.remove_favourite.api import RemoveFavourite
 from apps.buyer.apis.v110.view_all_items.api import ViewAllItems
+from apps.merchant.apis.v110.get_location_by_latlng.api import GetLocationByLatLng
 from apps.merchant.apis.v110.location_details.api import LocationDetails
 from apps.merchant.apis.v110.location_suggestion.api import LocationSuggestions
 from apps.merchant.apis.v110.report.api import ReportApi
@@ -22,3 +23,4 @@ class RoutingV110(RoutingV100):
         self.routing_collection['view_all_items'] = ViewAllItems
         self.routing_collection['location_suggestions'] = LocationSuggestions
         self.routing_collection['location_details'] = LocationDetails
+        self.routing_collection['get_location_by_latlng'] = GetLocationByLatLng

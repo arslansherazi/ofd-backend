@@ -4,7 +4,7 @@ from rest_framework import serializers
 class MenuItemsListingValidator(serializers.Serializer):
     menu_id = serializers.IntegerField()
     merchant_id = serializers.IntegerField(required=False)
-    is_buyer = serializers.BooleanField()
+    is_buyer = serializers.BooleanField(required=False, default=False)
     menu_item_id = serializers.IntegerField(required=False)
 
     def validate(self, attrs):

@@ -3,7 +3,6 @@ import json
 import requests
 
 from apps.merchant.apis.v110.location_suggestion.validator import LocationSuggestionValidator
-from apps.merchant.models.v100.report import Report
 from common.base_resource import BasePostResource
 from common.constants import GOOGLE_AUTO_COMPLETE_API_URL
 

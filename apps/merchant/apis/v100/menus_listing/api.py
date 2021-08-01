@@ -1,9 +1,9 @@
 from apps.merchant.models.v100.menu import Menu
 from apps.merchant.repositories.v100.merchant_repo import MerchantRepository
-from common.base_resource import BaseGetResource
+from common.base_resource import BasePostResource
 
 
-class MenusListing(BaseGetResource):
+class MenusListing(BasePostResource):
     version = 100
     end_point = 'menus_listing'
 

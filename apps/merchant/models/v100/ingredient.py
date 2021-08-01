@@ -141,6 +141,7 @@ class Ingredient(models.Model):
                     'rating_count': menu_item_data.get('menu_item_rating_count'),
                     'ingredients': [],
                     'is_favourite': False,
+                    'is_active': menu_item_data.get('is_active'),
                     'merchant_info': {
                         'id': menu_item_data.get('merchant_id'),
                         'name': menu_item_data.get('merchant_name'),
