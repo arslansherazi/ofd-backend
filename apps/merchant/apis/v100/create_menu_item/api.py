@@ -1,7 +1,6 @@
 import uuid
 
-from apps.merchant.apis.v100.create_menu_item.validator import \
-    CreateMenuItemValidator
+from apps.merchant.apis.v100.create_menu_item.validator import CreateMenuItemValidator
 from apps.merchant.models.v100.ingredient import Ingredient
 from apps.merchant.models.v100.menu_item import MenuItem
 from apps.merchant.models.v100.merchant import Merchant

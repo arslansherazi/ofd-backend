@@ -1,5 +1,5 @@
 from apps.buyer.apis.v110.favourites_listing.validator import \
-    FavouritesListingValidator
+FavouritesListingValidator
 from apps.buyer.models.v100.favourite import Favourite
 from apps.buyer.repositories.v100.buyer_repo import BuyerRepository
 from apps.merchant.models.v100.ingredient import Ingredient

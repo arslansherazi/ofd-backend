@@ -1,5 +1,4 @@
-from apps.buyer.apis.v100.add_notifications_token.validator import \
-    AddNotificationsTokenValidator
+from apps.buyer.apis.v100.add_notifications_token.validator import AddNotificationsTokenValidator
 from apps.buyer.models.v100.notifications_token import NotificationsToken
 from common.base_resource import BasePostResource
 
