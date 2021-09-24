@@ -44,6 +44,6 @@ AWS_ACL_PUBLIC_READ = 'public-read'
 AWS_STANDARD_STORAGE_CLASS = 'STANDARD'
 AWS_S3_BASE_URL = 'https://ofd-files.s3.us-east-2.amazonaws.com'
 DEFAULT_LOCATION_ID = 1
-GOOGLE_AUTO_COMPLETE_API_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={input}&location={location}&radius={radius}&key=AIzaSyA3lJgG2U0aWy2PLOTSW8TqSH832RL0vUU'  # noqa: 501
-GOOGLE_PLACE_DETAILS_API_URL = 'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&key=AIzaSyA3lJgG2U0aWy2PLOTSW8TqSH832RL0vUU'  # noqa: 501
-GOOGLE_GEOCODE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={latlng}&key=AIzaSyA3lJgG2U0aWy2PLOTSW8TqSH832RL0vUU'  # noqa: 501
+GOOGLE_AUTO_COMPLETE_API_URL = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={input}&location={location}&radius={radius}&key=AIzaSyB9QW8VqfZY7OKaYK2pZu5F0904zTnx6JA'  # noqa: 501
+GOOGLE_PLACE_DETAILS_API_URL = 'https://maps.googleapis.com/maps/api/place/details/json?place_id={place_id}&key=AIzaSyB9QW8VqfZY7OKaYK2pZu5F0904zTnx6JA'  # noqa: 501
+GOOGLE_GEOCODE_API_URL = 'https://maps.googleapis.com/maps/api/geocode/json?latlng={latlng}&key=AIzaSyB9QW8VqfZY7OKaYK2pZu5F0904zTnx6JA'  # noqa: 501

@@ -128,6 +128,7 @@ class Signup(BasePostResource):
         """
         self.response = {
             'data': {
+                'message': UserRepository.EMAIL_VERIFICATION_CODE_MESSAGE,
                 'is_signed_up': True
             }
         }
