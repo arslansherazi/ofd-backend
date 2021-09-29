@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from apps.buyer.models.v100.order import Order
@@ -38,6 +39,8 @@ class UpdateMenuItem(BasePostResource):
         """
         self.merchant_id = self.current_user_info.get('merchant_id')
         self.image_url = ''
+        if self.ingredients:
+            self.ingredients = json.loads(self.request_args.get('ingredients'))
 
     def verify_menu_item(self):
         """
@@ -113,7 +116,7 @@ class UpdateMenuItem(BasePostResource):
                     ingredient_details = {
                         'name': ingredient.get('name'),
                         'quantity': ingredient.get('quantity'),
-                        'unit': ingredient.get('quantity'),
+                        'unit': ingredient.get('unit'),
                     }
                     if ingredient.get('is_updated'):
                         ingredient_details.update(id=ingredient.get('id'))

@@ -30,11 +30,6 @@ class BaseResource(APIView):
                 self.request_args = self.request.query_params
             else:
                 self.request_args = self.request.data
-            # handle ingredients
-            if self.request_args.get('ingredients_count'):
-                for index in range(int(self.request_args.get('ingredients_count'))):
-                    ingredient_key = 'ingredients[{index}]'.format(index=index)
-                    self.request_args[ingredient_key] = json.loads(self.request_args[ingredient_key])
             self.is_send_response = False
             self.response = {}
             self.current_user_info = {}

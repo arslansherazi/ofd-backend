@@ -35,7 +35,7 @@ class MenuItem(models.Model):
         return super(MenuItem, self).save(*args, **kwargs)
 
     @classmethod
-    def save_menu_item(cls, merchant_id, menu_id, name, unit, quantity, price, image_url):
+    def save_menu_item(cls, merchant_id, menu_id, name, unit, quantity, price, image_url, is_active):
         """
         Saves menu item
 
@@ -46,12 +46,13 @@ class MenuItem(models.Model):
         :param int quantity: quantity
         :param int price: price
         :param str image_url: image url
+        :param bool is_active: is active
         :rtype int
         :returns menu item id
         """
         menu_item = cls(
             merchant_id=merchant_id, menu_id=menu_id, name=name, unit=unit, quantity=quantity, price=price,
-            image_url=image_url
+            image_url=image_url, is_active=is_active
         )
         menu_item.save()
         menu_item_id = menu_item.id

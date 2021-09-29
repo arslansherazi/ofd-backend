@@ -1,3 +1,4 @@
+import json
 import uuid
 
 from apps.merchant.apis.v100.create_menu_item.validator import CreateMenuItemValidator
@@ -26,6 +27,7 @@ class CreateMenuItem(BasePostResource):
         self.image = self.request_args.get('image')
         self.ingredients = self.request_args.get('ingredients')
         self.menu_id = self.request_args.get('menu_id')
+        self.is_active = self.request_args.get('is_active')
 
     def initialize_class_attributes(self):
         """
@@ -34,6 +36,7 @@ class CreateMenuItem(BasePostResource):
         self.image_url = ''
         self.image_small_name = ''
         self.merchant_id = self.current_user_info.get('merchant_id')
+        self.ingredients = json.loads(self.ingredients)
 
     def verify_duplicate_menu_item(self):
         """
@@ -82,7 +85,8 @@ class CreateMenuItem(BasePostResource):
         Saves dish into db
         """
         menu_item_id = MenuItem.save_menu_item(
-            self.merchant_id, self.menu_id, self.name, self.unit, self.quantity, self.price, self.image_url
+            self.merchant_id, self.menu_id, self.name, self.unit, self.quantity, self.price, self.image_url,
+            self.is_active
         )
         Ingredient.save_menu_item_ingredients(menu_item_id, self.ingredients)
 

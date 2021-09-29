@@ -13,5 +13,7 @@ class CreateMenuItemValidator(serializers.Serializer):
     unit = serializers.CharField(max_length=50)
     quantity = serializers.FloatField()
     image = serializers.ImageField()
-    ingredients = IngredientValidator(many=True)
+    # ingredients = IngredientValidator(many=True)
+    ingredients = serializers.CharField()
     menu_id = serializers.IntegerField()
+    is_active = serializers.BooleanField(required=False, default=True)

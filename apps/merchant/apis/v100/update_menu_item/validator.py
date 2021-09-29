@@ -36,4 +36,5 @@ class UpdateMenuItemValidator(serializers.Serializer):
     discount = serializers.IntegerField(required=False)
     is_activated = serializers.BooleanField(required=False, default=False)
     is_deactivated = serializers.BooleanField(required=False, default=False)
-    ingredients = IngredientValidator(many=True, required=False)
+    # ingredients = IngredientValidator(many=True, required=False)
+    ingredients = serializers.CharField(required=False, default=[])
