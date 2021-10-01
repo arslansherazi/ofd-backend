@@ -10,6 +10,7 @@ class MerchantOrdersListingFiltersValidator(serializers.Serializer):
 
 
 class MerchantOrdersListingValidator(serializers.Serializer):
-    filters = MerchantOrdersListingFiltersValidator(required=False)
+    # filters = MerchantOrdersListingFiltersValidator(required=False, default={})
+    filters = serializers.CharField(required=False, default='{}')
     offset = serializers.IntegerField(required=False, default=0)
     limit = serializers.IntegerField(required=False, default=20)

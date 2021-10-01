@@ -1,6 +1,7 @@
+import json
+
 from apps.buyer.models.v100.order_details import OrderDetails
-from apps.merchant.apis.v100.merchant_orders_listing.validation import \
-    MerchantOrdersListingValidator
+from apps.merchant.apis.v100.merchant_orders_listing.validation import MerchantOrdersListingValidator
 from apps.merchant.repositories.v100.merchant_repo import MerchantRepository
 from common.base_resource import BasePostResource
 
@@ -24,6 +25,7 @@ class MerchantOrdersListing(BasePostResource):
         """
         self.merchant_id = self.current_user_info.get('merchant_id')
         self.orders_exist = False
+        self.filters = json.loads(self.filters)
 
     def get_orders(self):
         """

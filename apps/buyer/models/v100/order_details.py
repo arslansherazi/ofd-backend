@@ -137,6 +137,7 @@ class OrderDetails(models.Model):
         buyer_name = kwargs.get('buyer_name', None)
         delivery_address = kwargs.get('delivery_address', None)
         is_delivery = kwargs.get('is_delivery', None)
+        is_takeaway = kwargs.get('is_takeaway', None)
 
         _q = cls.objects
         _q = _q.select_related('order')
@@ -150,17 +151,18 @@ class OrderDetails(models.Model):
         if order_number:
             _q = _q.filter(order__order_number=order_number)
         if buyer_name:
-            _q = _q.select_related('buyer')
-            buyer_first_name = buyer_name.split(' ')[0].lower()
-            buyer_last_name = buyer_name.split(' ')[-1].lower()
+            _q = _q.annotate(
+                buyer_search_name=Concat('order__buyer__first_name', Value(' '), 'order__buyer__last_name')
+            )
             _q = _q.filter(
-                Q(order__buyer__first_name__icontains=buyer_first_name) |
-                Q(order__buyer__last_name__icontains=buyer_last_name)
+                buyer_search_name__icontains=buyer_name
             )
         if is_delivery:
             _q = _q.filter(order__is_delivery=True)
             if delivery_address:
-                _q = _q.filter(order__delivery_address__contains=delivery_address.lower())
+                _q = _q.filter(order__delivery_address__icontains=delivery_address.lower())
+        if is_takeaway:
+            _q = _q.filter(order__is_delivery=False)
         _q = _q.filter(order__merchant_id=merchant_id)
         orders = _q.values(
             'order_id', buyer_id=F('order__buyer_id'), order_number=F('order__order_number'),
