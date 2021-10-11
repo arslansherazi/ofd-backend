@@ -40,7 +40,7 @@ class UpdateOrderStatus(BasePostResource):
         """
         Updates order status
         """
-        order_status = Order.get_order_status(self.order_id, self.merchant_id, self.buyer_id)
+        order_status = Order.get_order_status(self.order_id, self.merchant_id)
         if order_status:
             if (
                     self.status in [MerchantRepository.ACCEPTED_ORDER_STATUS, MerchantRepository.REJECTED_ORDER_STATUS]
@@ -70,13 +70,13 @@ class UpdateOrderStatus(BasePostResource):
                 }
             else:
                 Order.update_order_status(self.order_id, self.status)
-                notifications_token = NotificationsToken.get_notifications_token(self.buyer_id)
-                merchant_profile = Merchant.get_profile(self.merchant_id)
-                notification_body = MerchantRepository.NOTIFICATION_BODY.format(
-                    merchant_name=merchant_profile.get('name'), status=self.status
-                )
-                notification_data = OrderDetails.get_buyer_orders(order_id=self.order_id)
-                CommonHelpers.send_push_notification(notifications_token, notification_body, notification_data)
+                # notifications_token = NotificationsToken.get_notifications_token(self.buyer_id)
+                # merchant_profile = Merchant.get_profile(self.merchant_id)
+                # notification_body = MerchantRepository.NOTIFICATION_BODY.format(
+                #     merchant_name=merchant_profile.get('name'), status=self.status
+                # )
+                # notification_data = OrderDetails.get_buyer_orders(order_id=self.order_id)
+                # CommonHelpers.send_push_notification(notifications_token, notification_body, notification_data)
         else:
             self.is_send_response = True
             self.status_code = 422

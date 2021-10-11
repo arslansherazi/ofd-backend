@@ -16,6 +16,7 @@ class CreateMenu(BasePostResource):
         """
         self.name = self.request_args.get('name')
         self.image = self.request_args.get('image')
+        self.is_active = self.request_args.get('is_active')
 
     def initialize_class_attributes(self):
         """
@@ -60,7 +61,7 @@ class CreateMenu(BasePostResource):
         """
         Adds new menu into db
         """
-        Menu.add_new_menu(self.merchant_id, self.name, self.image_url)
+        Menu.add_new_menu(self.merchant_id, self.name, self.image_url, self.is_active)
 
     def prepare_response(self):
         """
