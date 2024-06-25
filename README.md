@@ -25,6 +25,9 @@ Draw polygon on map to get location boundry
 ~~~
 http://apps.headwallphotonics.com/
 ~~~
+~~~
+https://geojson.io/#map=2/20.0/0.0 (recommended)
+~~~
 Install GDL on MAC OS
 ~~~
 https://gist.github.com/kelvinn/f14f0fc24445a7994368f984c3e37724
@@ -37,4 +40,14 @@ manage.py is development server
 
 ~~~
 wsgi.py is production server
+~~~
+
+## Errors Solution
+django.db.migrations.exceptions.CircularDependencyError
+~~~
+1. comment foreign keys from all models 
+2. make migrations and migrate
+3. uncomment foreign keys 
+4. make migrations => set default value for foreign keys (e.g 1)
+5. migrate updated migrations
 ~~~

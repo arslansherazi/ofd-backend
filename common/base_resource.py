@@ -1,16 +1,16 @@
-import logging
-import os
+import json
 
 from django.shortcuts import render
 from requests import codes
 from rest_framework.decorators import APIView
 from rest_framework.response import Response
 
+from apps.buyer.models.v100.buyer import Buyer
+from apps.merchant.models.v100.merchant import Merchant
+from common.common_helpers import CommonHelpers
 from common.constants import (BASIC_AUTH_ENDPOINTS, BUYER_USER_TYPE,
                               INTERNAL_SERVER_ERROR_MESSAGE, NO_AUTH_ENDPOINTS,
                               ROUTING_PREFIX, SUCCESS_STATUS_CODES)
-from models.buyer import Buyer
-from models.merchant import Merchant
 from security.token_authentication import JWTTokenPermission
 
 
@@ -32,10 +32,11 @@ class BaseResource(APIView):
                 self.request_args = self.request.data
             self.is_send_response = False
             self.response = {}
+            self.current_user_info = {}
             self.http_response = None
             try:
                 if self.request_validator:
-                    self.request_validator.run_validation(data=self.request_args)
+                    self.request_args = self.request_validator.run_validation(data=self.request_args)
             except Exception as exception:
                 # bad_request = True
                 self.request_path = None
@@ -49,7 +50,7 @@ class BaseResource(APIView):
             # self.apm_client.begin_transaction(transaction_type=self.request_path)
             log_file_path = 'logs/apis/{end_point}'.format(end_point=self.end_point)
             log_file = '{end_point}_v{version}.log'.format(end_point=self.end_point, version=self.version)
-            logger = self.get_logger(log_file_path, log_file)
+            logger = CommonHelpers.get_logger(log_file_path, log_file)
             self.process_request()
             return self.send_response()
         except Exception as e:
@@ -68,6 +69,9 @@ class BaseResource(APIView):
     def process_request(self):
         pass
 
+    def populate_request_arguments(self):
+        pass
+
     def set_current_user_info(self):
         if (
                 self.end_point not in BASIC_AUTH_ENDPOINTS and
@@ -84,28 +88,13 @@ class BaseResource(APIView):
             else:
                 self.current_user_info.update(merchant_id=Merchant().get_merchant_id(self.request.user.id))
 
-    def get_logger(self, log_file_path, log_file):
-        logger = logging.getLogger()
-        if not os.path.isdir(log_file_path):
-            os.makedirs(log_file_path)
-        file_logging_formatter = logging.Formatter('%(asctime)s %(name)s %(message)s')
-        file_handler = logging.FileHandler(filename='{log_file_path}/{log_file}'.format(
-            log_file_path=log_file_path, log_file=log_file
-        ))
-        file_handler.suffix = '%Y-%m-%d'
-        file_handler.setFormatter(file_logging_formatter)
-        file_handler.setLevel(logging.INFO)
-        # apm_handler = LoggingHandler(client=self.apm_client)
-        # apm_handler.setLevel(logging.ERROR)
-        # apm_handler.setFormatter(file_logging_formatter)
-        file_handler.suffix = '%Y-%m-%d'
-        logger.addHandler(file_handler)
-        # logger.addHandler(apm_handler)
-        return logger
-
     def handle_bad_request_response(self, exception):
+        param_name = list(exception.detail.keys())[0]
+        response_message = exception.detail.get(param_name)[0]
+        if param_name != 'non_field_errors':
+            response_message = '{param_name}: {message}'.format(param_name=param_name, message=response_message)
         self.response = {
-            'message': str(exception)
+            'message': response_message
         }
         self.status_code = codes.BAD_REQUEST
 

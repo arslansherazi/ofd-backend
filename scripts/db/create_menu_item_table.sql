@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS menu_item
 	updated_date TIMESTAMP NULL DEFAULT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (merchant_id) REFERENCES merchant (id),
-    KEY idx_name (name) USING BTREE
-    KEY idx_discount (discount) USING BTREE
+    KEY idx_name (name) USING BTREE,
+    KEY idx_discount (discount) USING BTREE,
     KEY idx_rating (rating) USING BTREE
 );

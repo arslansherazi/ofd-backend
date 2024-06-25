@@ -11,12 +11,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apis',
+    'apps.user',
+    'apps.merchant',
+    'apps.buyer',
+    'corsheaders',
     'rest_framework'
 ]
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -67,16 +71,19 @@ AUTH_PASSWORD_VALIDATORS = [
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=85440)  # 10 years
 }
-# email configurations
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'arslan.python.dev@gmail.com'
-EMAIL_HOST_PASSWORD = 'glennmaxwell2018'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Karachi'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
+
+# email configurations
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'email-smtp.us-east-2.amazonaws.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'AKIATFPQJWU3XFF6ZAFR'
+EMAIL_HOST_PASSWORD = 'BNU9UGvFa+YlU2MWVudYQGhkR3YhJeuw+xttdNUkkqo6'
+
+AUTH_USER_MODEL = 'user.User'
